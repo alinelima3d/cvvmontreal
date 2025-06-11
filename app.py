@@ -183,6 +183,7 @@ class ExecutiveMemberForm(FlaskForm):
     french = BooleanField("French:")
     preferable = IntegerField("Preferable:")
     organization = StringField("Organization:")
+    order = IntegerField("Order:")
     submit = SubmitField("Update:")
 
 
