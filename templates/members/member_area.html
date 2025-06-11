@@ -1,0 +1,19 @@
+{% extends 'base/base.html' %}
+{% block content %}
+
+  <h1>Member Area</h1>
+  <div class="col-md-12 container">
+       {% include 'members/my_info.html' %}
+       <div class="col-md-12 shadow-lg rounded div-info" id="myMembership">
+          <h3>My Membership</h3>
+          <label for="name">Member Since:</label>
+          <input type="text" class="form-control" id="memberSince">
+          <label for="name">Expiration Date:</label>
+          <input type="text" class="form-control" id="expirationDate">
+       </div>
+       {% include 'executive_members/meetings.html' %}
+       {% include 'members/member_list.html' %}
+       <br>
+  </div>
+  <script src="{{ url_for('static', filename='js/fillMember.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,43 @@
+<div class="col-md-12 shadow-lg rounded div-info" id="attendanceList">
+   <h3>Member Attendance</h3>
+
+   <div class="input-group">
+       <input type="text" class="form-control" id="validationTooltipUsername" placeholder="YYYY-mm-dd" aria-describedby="validationTooltipUsernamePrepend" required>
+       <div class="input-group-prepend">
+         <span class="input-group-text" id="validationTooltipUsernamePrepend">to</span>
+       </div>
+       <input type="text" class="form-control" id="validationTooltipUsername" placeholder="YYYY-mm-dd" aria-describedby="validationTooltipUsernamePrepend" required>
+       <div class="invalid-tooltip">
+         Please choose a unique and valid username.
+       </div>
+     </div>
+
+   <div class="form-group">
+     <table class="table" id="usersTable">
+       <thead>
+         <tr>
+           <th scope="col" class="firstCol">Name</th>
+           {% for meeting in meetings %}
+            <th scope="col">{{ meeting.date }}</th>
+           {% endfor %}
+         </tr>
+       </thead>
+     {% for our_member in our_members %}
+       <tr>
+         <td class="firstCol">{{ our_member.name }} (100%)</td>
+         {% for meeting in meetings %}
+          <td><i class="bi bi-check2-circle" style="color:green"></i></td>
+         {% endfor %}
+       </tr>
+     {% endfor %}
+     </table>
+    <br/>
+    <div class="d-flex justify-content-between">
+        <div></div>
+        <div>
+           <a class="btn blueButton" href="{{ url_for('add_executive_member') }}" role="button">Download</a>
+        </div>
+   </div>
+
+  </div>
+</div>

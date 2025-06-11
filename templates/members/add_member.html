@@ -1,0 +1,52 @@
+{% extends 'base/base_iframe.html' %}
+{% block content %}
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below. {{ message }}
+        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form method="POST">
+      {{ form.hidden_tag() }}
+
+      <strong>{{ form.name.label(class="form-label") }}</strong>
+      {{ form.name(class="form-control") }}
+
+      <strong>{{ form.role.label(class="form-label") }}</strong>
+      {{ form.role(class="form-control") }}
+
+      <strong>{{ form.email.label(class="form-label") }}</strong>
+      {{ form.email(class="form-control") }}
+
+      <strong>{{ form.telephone.label(class="form-label") }}</strong>
+      {{ form.telephone(class="form-control") }}
+
+      <strong>{{ form.english.label(class="form-label") }}</strong>
+      {{ form.english() }}
+
+      <strong>{{ form.french.label(class="form-label") }}</strong>
+      {{ form.french() }}<br/>
+
+      <strong>{{ form.preferable.label(class="form-label") }}</strong>
+      {{ form.preferable(class="form-control") }}
+
+      <strong>{{ form.organization.label(class="form-label") }}</strong>
+      {{ form.organization(class="form-control") }}
+
+      <strong>{{ form.volunteers.label(class="form-label") }}</strong>
+      {{ form.volunteers(class="form-control") }}
+
+      <br/>
+      {{ form.submit(class="btn blueButton") }}
+
+
+    </form>
+
+{% endblock %}

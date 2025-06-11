@@ -1,0 +1,26 @@
+{% extends 'base/base_iframe.html' %}
+{% block content %}
+
+  {% if date %}
+    <h1>Meeting create: {{ date }}!!</h1>
+  {% else %}
+    <h1>Add New Meeting</h1>
+    </br>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+
+      {{ form.date.label(class="form-label") }}
+      {{ form.date(class="form-control") }}
+
+      {{ form.minute.label(class="form-label") }}
+      {{ form.minute(class="form-control") }}
+
+      {{ form.attendees.label(class="form-label") }}
+      {{ form.attendees(class="form-control") }}
+
+      <br/>
+      {{ form.submit(class="btn blueButton") }}
+
+    </form>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base/base_iframe.html' %}
+
+{% block content %}
+
+  {% for message in get_flashed_messages() %}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+
+  <form action="/update_member/{{ executive_member_to_update.id }}" method="POST">
+    {{ form.hidden_tag() }}
+
+    <strong>{{ form.name.label(class="form-label") }}</strong>
+    {{ form.name(class="form-control", value=executive_member_to_update.name) }}
+    <strong>{{ form.role.label(class="form-label") }}</strong>
+    {{ form.role(class="form-control", value=executive_member_to_update.role) }}
+    <strong>{{ form.email.label(class="form-label") }}</strong>
+    {{ form.email(class="form-control", value=executive_member_to_update.email) }}
+    <strong>{{ form.telephone.label(class="form-label") }}</strong>
+    {{ form.telephone(class="form-control", value=executive_member_to_update.telephone) }}
+    <strong>{{ form.english.label(class="form-label") }}</strong>
+    {{ form.english(value=executive_member_to_update.english) }}
+    <strong>{{ form.french.label(class="form-label") }}</strong>
+    {{ form.french(value=executive_member_to_update.french) }}<br/>
+    <strong>{{ form.preferable.label(class="form-label") }}</strong>
+    {{ form.preferable(class="form-control", value=executive_member_to_update.preferable) }}
+    <strong>{{ form.organization.label(class="form-label") }}</strong>
+    {{ form.organization(class="form-control", value=executive_member_to_update.organization) }}
+
+    <br/>
+    {{ form.submit(class="btn blueButton") }}
+    {% if deletable %}
+      <a class="btn btn-danger" href="{{ url_for('delete_member', id=executive_member_to_update.id) }}">Delete</a>
+    {% endif %}
+
+  </form>
+
+{% endblock %}

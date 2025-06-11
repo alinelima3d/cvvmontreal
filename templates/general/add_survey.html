@@ -1,0 +1,32 @@
+{% extends 'base/base_iframe.html' %}
+{% block content %}
+
+  {% if title %}
+    <h1>Survey create: {{ title }}!!</h1>
+  {% else %}
+    <h1>Add New Survey</h1>
+    </br>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+
+      {{ form.title.label(class="form-label") }}
+      {{ form.title(class="form-control") }}
+
+      {{ form.start.label(class="form-label") }}
+      {{ form.start(class="form-control") }}
+
+      {{ form.end.label(class="form-label") }}
+      {{ form.end(class="form-control") }}
+
+      {{ form.responders.label(class="form-label") }}
+      {{ form.responders(class="form-control") }}
+
+      {{ form.file.label(class="form-label") }}
+      {{ form.file(class="form-control") }}
+
+      <br/>
+      {{ form.submit(class="btn blueButton") }}
+
+    </form>
+  {% endif %}
+{% endblock %}

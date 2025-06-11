@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% block content %}
+
+
+  <h1>Executive Member Area</h1>
+  <div class="col-md-12 container">
+    {% include 'executive_members/my_info.html' %}
+    {% include 'executive_members/task_repartition.html' %}
+    {% include 'executive_members/payment_status.html' %}
+    {% include 'executive_members/member_attendance.html' %}
+    {% include 'executive_members/surveys.html' %}
+    {% include 'executive_members/meetings.html' %}
+    {% include 'executive_members/executive_member_list.html' %}
+    {% include 'members/member_list.html' %}
+  </div>
+  <script src="{{ url_for('static', filename='js/fillExecutiveMember.js') }}"></script>
+{% endblock %}

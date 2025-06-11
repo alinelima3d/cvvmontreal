@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+{% block content %}
+  <h1>Executive Members</h1>
+  <br/>
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    {% for our_executive_member in our_executive_members %}
+    <div class="col">
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/executive_members/' + our_executive_member.id|string + '.png') }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ our_executive_member.name }}</h5>
+          <p class="card-text">{{ our_executive_member.role }}</p>
+          <p class="card-text">{{ our_executive_member.organization }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+  <br/>
+  <br/>
+
+{% endblock %}

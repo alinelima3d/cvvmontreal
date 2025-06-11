@@ -1,0 +1,33 @@
+<div class="col-md-12 shadow-lg rounded div-info" id="myInfo">
+  <h3>My Info</h3>
+    <strong>Name: </strong>{{ executive_member_to_update.name}}<br/>
+    <strong>Role: </strong>{{ executive_member_to_update.role}}<br/>
+    <strong>Email: </strong>{{ executive_member_to_update.email}}<br/>
+    <strong>Phone Number: </strong>{{ executive_member_to_update.telephone}}<br/>
+    <strong>English: </strong>
+    {% if executive_member_to_update.english == True %}
+      Yes
+    {% else %}
+      No
+    {% endif %}
+    <br/>
+    <strong>French: </strong>
+    {% if executive_member_to_update.french == True %}
+      Yes
+    {% else %}
+      No
+    {% endif %}
+    <br/>
+    <strong>Preferable: </strong>
+    {% if executive_member_to_update.preferable == 1 %}
+      English
+    {% else %}
+      French
+    {% endif %}
+    <br/>
+    <strong>Organization: </strong>{{ executive_member_to_update.organization}}<br/>
+    <br/><br/>
+    <button class="btn blueButton" style="padding:0px" data-bs-toggle="modal" data-bs-target="#defaultModal" data-bs-url="{{ url_for('update_executive_member', id=executive_member_to_update.id) }}" data-bs-title="Edit My Info">Edit My Info</button>
+
+
+</div>
