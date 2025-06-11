@@ -374,10 +374,10 @@ def add_survey():
             db.session.commit()
             flash("Survey added successfully!")
 
-        title = form.title.data
-        form.title.data = ''
-        form.start.data = ''
-        form.end.data = ''
+            title = form.title.data
+            form.title.data = ''
+            form.start.data = ''
+            form.end.data = ''
 
     return render_template('general/add_survey.html',
         form = form,
@@ -463,10 +463,10 @@ def add_meeting():
             db.session.commit()
             flash("Meeting added successfully!")
 
-        date = form.date.data
-        form.date.data = ''
-        form.minute.data = ''
-        form.attendees.data = ''
+            date = form.date.data
+            form.date.data = ''
+            form.minute.data = ''
+            form.attendees.data = ''
 
 
     return render_template('general/add_meeting.html',
@@ -614,6 +614,10 @@ def page_not_found(e):
 @app.errorhandler(500)
 def page_not_found(e):
     return render_template("errors/500.html"), 500
+
+@app.template_filter('removeHour')
+def removeHour_filter(s):
+    return s.split(' ')[0]
 
 # with app.app_context():
 #     db.create_all()

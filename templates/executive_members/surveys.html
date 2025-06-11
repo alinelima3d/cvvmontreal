@@ -15,8 +15,8 @@
    {% for survey in surveys %}
      <tr>
        <td class="firstCol">{{ survey.title }}</td>
-       <td>{{ survey.start}}</td>
-       <td>{{ survey.end}}</td>
+       <td>{{ survey.start|removeHour}}</td>
+       <td>{{ survey.end|removeHour}}</td>
        <td>{{ survey.responders}}</td>
        <td>
          <button class="btn" data-bs-toggle="modal" data-bs-target="#editSurveyModal"><i class="bi-box-arrow-down"></i></button>
