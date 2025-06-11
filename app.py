@@ -10,7 +10,7 @@ import json
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'my super secret key that no one is suppose to know'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/cvv'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ue9r2df1jcvfh2:p77d7215e49ae55f05cdd9aeceb8bbd3d601d18cd9fba706bac3c09e836b2575d@c2hbg00ac72j9d.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d6igtkis6hsviv'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ue9r2df1jcvfh2:p77d7215e49ae55f05cdd9aeceb8bbd3d601d18cd9fba706bac3c09e836b2575d@c2hbg00ac72j9d.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d6igtkis6hsviv'
 db = SQLAlchemy(app)
 
 
