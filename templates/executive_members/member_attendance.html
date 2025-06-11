@@ -18,7 +18,7 @@
          <tr>
            <th scope="col" class="firstCol">Name</th>
            {% for meeting in meetings %}
-            <th scope="col">{{ meeting.date|removeHour }}</th>
+            <th scope="col">{{ meeting.date }}</th>
            {% endfor %}
          </tr>
        </thead>
