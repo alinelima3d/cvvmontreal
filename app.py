@@ -352,8 +352,8 @@ class SurveyForm(FlaskForm):
 class Surveys(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    start = db.Column(db.DateTime)
-    end = db.Column(db.DateTime)
+    start = db.Column(db.Date)
+    end = db.Column(db.Date)
     responders = db.Column(db.Integer)
     file = db.Column(db.String(200))
 
