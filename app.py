@@ -14,7 +14,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ue9r2df1jcvfh2:p77d7215e49
 db = SQLAlchemy(app)
 
 
-
 # MEMBERS FORM/DATABASE ----------------------------------------------------
 
 # Flask form
