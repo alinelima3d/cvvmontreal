@@ -208,7 +208,7 @@ class ExecutiveMembers(db.Model):
 @app.route('/add_executive_member', methods=['GET', 'POST'])
 def add_executive_member():
     name = None
-    form = MemberForm()
+    form = ExecutiveMemberForm()
     if form.validate_on_submit():
         user = ExecutiveMembers.query.filter_by(email=form.email.data).first()
         if user is None:
@@ -218,6 +218,7 @@ def add_executive_member():
                 # english=form.english.data,
                 # french=form.french.data,
                 role=form.role.data,
+                order=form.order.data,
                 telephone=form.telephone.data,
                 organization=form.organization.data,
 
@@ -246,6 +247,7 @@ def update_executive_member(id):
         executive_member_to_update.role = request.form["role"]
         executive_member_to_update.email = request.form["email"]
         executive_member_to_update.telephone = request.form["telephone"]
+        executive_member_to_update.order = request.form["order"]
         # executive_member_to_update.english = request.form["english"]
         # executive_member_to_update.french = request.form["french"]
         # executive_member_to_update.preferable = request.form["preferable"]
@@ -273,7 +275,7 @@ def update_executive_member(id):
 def delete_executive_member(id):
     executive_member_to_delete = ExecutiveMembers.query.get_or_404(id)
     name = None
-    form = MemberForm()
+    form = ExecutiveMemberForm()
     try:
         db.session.delete(executive_member_to_delete)
         db.session.commit()
