@@ -215,6 +215,8 @@ def add_executive_member():
             executiveMember = ExecutiveMembers(name=form.name.data, email=form.email.data, role=form.role.data)
             db.session.add(executiveMember)
             db.session.commit()
+            flash('Executive Member <strong>%s</strong> added successfully!' % form.name.data)
+
         name = form.name.data
         form.name.data = ''
         form.email.data = ''
@@ -241,7 +243,7 @@ def update_executive_member(id):
         executive_member_to_update.volunteers = request.form["volunteers"]
         try:
             db.session.commit()
-            flash("User updated successfully!")
+            flash('Executive Member <strong>%s</strong> updated successfully!' % executive_member_to_update.name)
             return render_template("executive_members/update_executive_member.html",
                 form=form,
                 executive_member_to_update=executive_member_to_update,
@@ -266,19 +268,19 @@ def delete_executive_member(id):
     try:
         db.session.delete(executive_member_to_delete)
         db.session.commit()
-        flash("Executive Member deleted successfully!")
+        flash('Executive Member <strong>%s</strong> deleted successfully!' % executive_member_to_delete.name)
 
         name=executive_member_to_delete.name
 
-        return render_template('members/update_executive_member.html',
+        return render_template('executive_members/update_executive_member.html',
             form = form,
             name=name,
-            member_to_update=executive_member_to_delete)
+            executive_member_to_update=executive_member_to_delete)
     except:
-        return render_template('members/update_executive_member.html',
+        return render_template('executive_members/update_executive_member.html',
             form = form,
             name=name,
-            member_to_update=executive_member_to_delete)
+            executive_member_to_update=executive_member_to_delete)
 
 @app.route('/executive_member_area/<int:id>')
 def executive_member_area(id):
@@ -581,8 +583,8 @@ def page_not_found(e):
 def page_not_found(e):
     return render_template("errors/500.html"), 500
 
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 # main driver function
 if __name__ == '__main__':

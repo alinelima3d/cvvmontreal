@@ -3,9 +3,8 @@
 {% block content %}
 
   {% for message in get_flashed_messages() %}
-
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{ message }}
+    {{ message|safe }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
   {% endfor %}
@@ -33,7 +32,7 @@
     <br/>
     {{ form.submit(class="btn blueButton") }}
     {% if deletable %}
-      <a class="btn btn-danger" href="{{ url_for('delete_member', id=executive_member_to_update.id) }}">Delete</a>
+      <a class="btn btn-danger" href="{{ url_for('delete_executive_member', id=executive_member_to_update.id) }}">Delete</a>
     {% endif %}
 
   </form>
