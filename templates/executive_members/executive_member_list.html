@@ -4,6 +4,7 @@
    <table class="table" id="usersTable">
      <thead>
        <tr>
+         <th scope="col" class="firstCol"></th>
          <th scope="col" class="firstCol">Name</th>
          <th scope="col">Role</th>
          <th scope="col">Organization</th>
@@ -13,6 +14,7 @@
    {% for our_executive_member in our_executive_members %}
 
      <tr>
+       <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/executive_members/' + our_executive_member.id|string + '.png') }}"></td>
        <td class="firstCol">{{ our_executive_member.name }}</td>
        <td>{{ our_executive_member.role}}</td>
        <td>{{ our_executive_member.organization}}</td>

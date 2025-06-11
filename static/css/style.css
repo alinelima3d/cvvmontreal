@@ -94,6 +94,12 @@ td, thead {
   width: 40px;
   display:none;
 }
+.photo_list{
+  border-radius: 100px !important;
+  margin: 0px 10px 0px 0px;
+  height: 30px;
+  width: 30px;
+}
 #members_only {
   display:none;
 }
