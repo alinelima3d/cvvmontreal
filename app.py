@@ -98,9 +98,6 @@ def update_member(id):
         member_to_update.role = request.form["role"]
         member_to_update.email = request.form["email"]
         member_to_update.telephone = request.form["telephone"]
-        member_to_update.english = request.form["english"]
-        member_to_update.french = request.form["french"]
-        member_to_update.preferable = request.form["preferable"]
         member_to_update.organization = request.form["organization"]
         member_to_update.volunteers = request.form["volunteers"]
         try:
