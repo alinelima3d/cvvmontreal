@@ -44,8 +44,8 @@ class Members(db.Model):
     preferable = db.Column(db.Integer)
     organization = db.Column(db.String(100))
     volunteers = db.Column(db.Integer)
-    member_since = db.Column(db.DateTime)
-    # expiration_date = db.Column(db.DateTime)
+    member_since = db.Column(db.Date)
+    # expiration_date = db.Column(db.Date)
 
     def __repr__(self):
         return '<Name %r>' % self.name
@@ -75,6 +75,12 @@ def add_member():
         form.name.data = ''
         form.role.data = ''
         form.email.data = ''
+        form.telephone.data = ''
+        form.english.data = ''
+        form.french.data = ''
+        form.preferable.data = ''
+        form.organization.data = ''
+        form.volunteers.data = ''
 
     our_members = Members.query.order_by(Members.name)
     return render_template('members/add_member.html',
@@ -345,8 +351,8 @@ class SurveyForm(FlaskForm):
 class Surveys(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    start = db.Column(db.DateTime)
-    end = db.Column(db.DateTime)
+    start = db.Column(db.Date)
+    end = db.Column(db.Date)
     responders = db.Column(db.Integer)
     file = db.Column(db.String(200))
 
@@ -365,6 +371,8 @@ def add_survey():
             file=form.file.data)
             db.session.add(survey)
             db.session.commit()
+            flash("Survey added successfully!")
+
         title = form.title.data
         form.title.data = ''
         form.start.data = ''
@@ -427,7 +435,7 @@ def delete_survey(id):
 # Database Model
 class Meetings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     minute = db.Column(db.String(200))
     attendees = db.Column(db.Integer)
 
@@ -452,7 +460,13 @@ def add_meeting():
             attendees=form.attendees.data)
             db.session.add(meeting)
             db.session.commit()
+            flash("Meeting added successfully!")
+
         date = form.date.data
+        form.date.data = ''
+        form.minute.data = ''
+        form.attendees.data = ''
+
 
     return render_template('general/add_meeting.html',
         form = form,

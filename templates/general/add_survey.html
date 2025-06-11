@@ -1,11 +1,13 @@
 {% extends 'base/base_iframe.html' %}
 {% block content %}
 
-  {% if title %}
-    <h1>Survey create: {{ title }}!!</h1>
-  {% else %}
-    <h1>Add New Survey</h1>
-    </br>
+    {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message|safe }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+
     <form method="POST">
       {{ form.hidden_tag() }}
 
@@ -28,5 +30,4 @@
       {{ form.submit(class="btn blueButton") }}
 
     </form>
-  {% endif %}
 {% endblock %}
