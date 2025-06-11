@@ -43,8 +43,8 @@ class Members(db.Model):
     preferable = db.Column(db.Integer)
     organization = db.Column(db.String(100))
     volunteers = db.Column(db.Integer)
-    member_since = db.Column(db.Date)
-    # expiration_date = db.Column(db.Date)
+    member_since = db.Column(db.DateTime)
+    # expiration_date = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Name %r>' % self.name
@@ -350,8 +350,8 @@ class SurveyForm(FlaskForm):
 class Surveys(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    start = db.Column(db.Date)
-    end = db.Column(db.Date)
+    start = db.Column(db.DateTime)
+    end = db.Column(db.DateTime)
     responders = db.Column(db.Integer)
     file = db.Column(db.String(200))
 
@@ -434,7 +434,7 @@ def delete_survey(id):
 # Database Model
 class Meetings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
     minute = db.Column(db.String(200))
     attendees = db.Column(db.Integer)
 
@@ -508,6 +508,9 @@ def delete_meeting(id):
         flash("Meeting deleted successfully!")
 
         date=meeting_to_delete.date
+        form.date.data = ''
+        form.minute.data = ''
+        form.attendees.data = ''
 
         return render_template('executive_members/update_meeting.html',
             form = form,
