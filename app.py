@@ -212,7 +212,17 @@ def add_executive_member():
     if form.validate_on_submit():
         user = ExecutiveMembers.query.filter_by(email=form.email.data).first()
         if user is None:
-            executiveMember = ExecutiveMembers(name=form.name.data, email=form.email.data, role=form.role.data)
+            executiveMember = ExecutiveMembers(
+                name=form.name.data,
+                email=form.email.data,
+                # english=form.english.data,
+                # french=form.french.data,
+                role=form.role.data,
+                telephone=form.telephone.data,
+                organization=form.organization.data,
+
+
+                )
             db.session.add(executiveMember)
             db.session.commit()
             flash('Executive Member <strong>%s</strong> added successfully!' % form.name.data)
