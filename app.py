@@ -91,8 +91,8 @@ def update_member(id):
         member_to_update.role = request.form["role"]
         member_to_update.email = request.form["email"]
         member_to_update.telephone = request.form["telephone"]
-        # member_to_update.english = request.form["english"]
-        # member_to_update.french = request.form["french"]
+        member_to_update.english = request.form["english"]
+        member_to_update.french = request.form["french"]
         member_to_update.preferable = request.form["preferable"]
         member_to_update.organization = request.form["organization"]
         member_to_update.volunteers = request.form["volunteers"]
@@ -185,7 +185,7 @@ class ExecutiveMemberForm(FlaskForm):
     preferable = IntegerField("Preferable:")
     organization = StringField("Organization:")
     order = IntegerField("Order:")
-    submit = SubmitField("Update:")
+    submit = SubmitField("Update")
 
 
 # Database Model
@@ -236,11 +236,10 @@ def update_executive_member(id):
         executive_member_to_update.role = request.form["role"]
         executive_member_to_update.email = request.form["email"]
         executive_member_to_update.telephone = request.form["telephone"]
-        executive_member_to_update.english = request.form["english"]
-        executive_member_to_update.french = request.form["french"]
-        executive_member_to_update.preferable = request.form["preferable"]
+        # executive_member_to_update.english = request.form["english"]
+        # executive_member_to_update.french = request.form["french"]
+        # executive_member_to_update.preferable = request.form["preferable"]
         executive_member_to_update.organization = request.form["organization"]
-        executive_member_to_update.volunteers = request.form["volunteers"]
         try:
             db.session.commit()
             flash('Executive Member <strong>%s</strong> updated successfully!' % executive_member_to_update.name)
