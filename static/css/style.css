@@ -100,6 +100,10 @@ td, thead {
   height: 30px;
   width: 30px;
 }
+.photo_big {
+  width: 150px;
+  border-radius:100px;
+}
 #members_only {
   display:none;
 }
@@ -120,8 +124,26 @@ td, thead {
   color:white;
   height:40px;
 }
-.paid {
+.Paid {
   background-color:#C2CB52;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+}
+.Expired {
+  background-color:#FF533C;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+}
+.Almost {
+  background-color:#FF9E3C;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+}
+.Found {
+  background-color: black;
   border-radius: 4px;
   color: white;
   text-align: center;

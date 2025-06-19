@@ -9,13 +9,23 @@
   </div>
   {% endfor %}
 
-  <form action="/update_executive_member/{{ executive_member_to_update.id }}" method="POST">
+  <form action="/update_executive_member/{{ executive_member_to_update.id }}" method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
+
+    {% if executive_member_to_update.executive_member_pic %}
+     <img class="photo_big" src="{{ url_for('static', filename='images/upload/executive_member_pics/' + executive_member_to_update.executive_member_pic|string ) }}">
+    {% else %}
+     <img class="photo_big" src="{{ url_for('static', filename='images/icons/user.png') }}">
+    {% endif %}
+    <br>
+
 
     <strong>{{ form.name.label(class="form-label") }}</strong>
     {{ form.name(class="form-control", value=executive_member_to_update.name) }}
     <strong>{{ form.role.label(class="form-label") }}</strong>
     {{ form.role(class="form-control", value=executive_member_to_update.role) }}
+    <strong>{{ form.bio.label(class="form-label") }}</strong>
+    {{ form.bio(class="form-control", value=executive_member_to_update.bio) }}
     <strong>{{ form.email.label(class="form-label") }}</strong>
     {{ form.email(class="form-control", value=executive_member_to_update.email) }}
     <strong>{{ form.telephone.label(class="form-label") }}</strong>
@@ -30,6 +40,8 @@
     {{ form.preferable(class="form-control", value=executive_member_to_update.preferable) }} -->
     <strong>{{ form.organization.label(class="form-label") }}</strong>
     {{ form.organization(class="form-control", value=executive_member_to_update.organization) }}
+    <strong>{{ form.executive_member_pic.label(class="form-label") }}</strong>
+    {{ form.executive_member_pic(class="form-control", value=executive_member_to_update.executive_member_pic) }}
 
     <br/>
     {{ form.submit(class="btn blueButton") }}

@@ -9,7 +9,7 @@
     {% endfor %}
 
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
       {{ form.hidden_tag() }}
 
       <strong>{{ form.name.label(class="form-label") }}</strong>
@@ -38,6 +38,10 @@
 
       <strong>{{ form.volunteers.label(class="form-label") }}</strong>
       {{ form.volunteers(class="form-control") }}
+
+      <strong>{{ form.member_pic.label(class="form-label") }}</strong>
+      {{ form.member_pic(class="form-control") }}
+
 
       <br/>
       {{ form.submit(class="btn blueButton") }}

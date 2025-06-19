@@ -14,7 +14,11 @@
    {% for our_executive_member in our_executive_members %}
 
      <tr>
-       <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/executive_members/' + our_executive_member.id|string + '.png') }}"></td>
+       {% if our_executive_member.executive_member_pic %}
+        <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/upload/executive_member_pics/' + our_executive_member.executive_member_pic|string ) }}"></td>
+       {% else %}
+        <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/icons/user.png') }}"></td>
+       {% endif %}
        <td class="firstCol">{{ our_executive_member.name }}</td>
        <td>{{ our_executive_member.role}}</td>
        <td>{{ our_executive_member.organization}}</td>

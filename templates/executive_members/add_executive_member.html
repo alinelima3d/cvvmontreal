@@ -8,7 +8,7 @@
       </div>
     {% endfor %}
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
       {{ form.hidden_tag() }}
 
       <strong>{{ form.name.label(class="form-label") }}</strong>
@@ -16,6 +16,9 @@
 
       <strong>{{ form.role.label(class="form-label") }}</strong>
       {{ form.role(class="form-control") }}
+
+      <strong>{{ form.bio.label(class="form-label") }}</strong>
+      {{ form.bio(class="form-control") }}
 
       <strong>{{ form.email.label(class="form-label") }}</strong>
       {{ form.email(class="form-control") }}
@@ -25,6 +28,8 @@
 
       <strong>{{ form.order.label(class="form-label") }}</strong>
       {{ form.order(class="form-control") }}
+
+
 
       <!-- <strong>{{ form.english.label(class="form-label") }}</strong>
       {{ form.english() }}
@@ -38,6 +43,8 @@
       <strong>{{ form.organization.label(class="form-label") }}</strong>
       {{ form.organization(class="form-control") }}
 
+      <strong>{{ form.executive_member_pic.label(class="form-label") }}</strong>
+      {{ form.executive_member_pic(class="form-control") }}
       <br/>
       {{ form.submit(class="btn blueButton") }}
 

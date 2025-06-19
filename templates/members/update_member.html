@@ -10,9 +10,15 @@
   </div>
   {% endfor %}
 
-  <form action="/update_member/{{ member_to_update.id }}" method="POST">
+  <form action="/update_member/{{ member_to_update.id }}" method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
 
+    {% if member_to_update.member_pic %}
+     <img class="photo_big" src="{{ url_for('static', filename='images/upload/member_pics/' + member_to_update.member_pic|string ) }}">
+    {% else %}
+     <img class="photo_big" src="{{ url_for('static', filename='images/icons/user.png') }}">
+    {% endif %}
+    <br>
     <strong>{{ form.name.label(class="form-label") }}</strong>
     {{ form.name(class="form-control", value=member_to_update.name) }}
     <strong>{{ form.role.label(class="form-label") }}</strong>
@@ -25,6 +31,9 @@
     {{ form.organization(class="form-control", value=member_to_update.organization) }}
     <strong>{{ form.volunteers.label(class="form-label") }}</strong>
     {{ form.volunteers(class="form-control", value=member_to_update.volunteers) }}
+    <strong>{{ form.member_pic.label(class="form-label") }}</strong>
+    {{ form.member_pic(class="form-control", value=member_to_update.member_pic) }}
+
     <br/>
     {{ form.submit(class="btn blueButton") }}
     <a class="btn btn-danger" href="{{ url_for('delete_member', id=member_to_update.id) }}">Delete</a>

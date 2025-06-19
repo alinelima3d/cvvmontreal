@@ -16,14 +16,21 @@
      <table class="table" id="usersTable">
        <thead>
          <tr>
+
+           <th scope="col" class="firstCol"></th>
            <th scope="col" class="firstCol">Name</th>
            {% for meeting in meetings %}
-            <th scope="col">{{ meeting.date }}</th>
+            <th scope="col">{{ meeting.date.strftime('%Y-%m-%d') }}</th>
            {% endfor %}
          </tr>
        </thead>
      {% for our_member in our_members %}
        <tr>
+         {% if our_member.member_pic %}
+          <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/upload/member_pics/' + our_member.member_pic|string ) }}"></td>
+         {% else %}
+          <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/icons/user.png') }}"></td>
+         {% endif %}
          <td class="firstCol">{{ our_member.name }} (100%)</td>
          {% for meeting in meetings %}
           <td><i class="bi bi-check2-circle" style="color:green"></i></td>

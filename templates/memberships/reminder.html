@@ -1,0 +1,37 @@
+{% extends 'base/base_iframe.html' %}
+
+{% block content %}
+
+<p>Here's a sample email to remind members about renewing their membership.</p>
+  <ul>
+    <li>1. Check and make changes if needs.</li>
+    <li>2. Send via <strong>email</strong>: {{ member.email }}</li>
+    <li>3. Click in the button "Mark as Reminded and Close" bellow.</li>
+  </ul>
+
+  <label for="exampleFormControlTextarea1" class="fo  <label for="exampleInputEmail1"><strong>Email Subject</strong></label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="Membership renew reminder - CVV Montreal">
+  <label><strong>Email Text:</strong></label>
+  <textarea class="form-control" id="exampleFormControlTextarea1" rows="15">
+Hello {{ member.name }},
+
+Your membership, which began in {{ last_membership.start.strftime('%Y-%m-%d') }}, is expiring on {{ last_membership.end.strftime('%Y-%m-%d') }}.
+
+We hope you've enjoyed your experience with our association this year and encourage you to renew your membership!
+
+To renew, please send a check to [Address] or an e-transfer to cvvmontreal@gmail.com. Kindly send us an email by [Date] to confirm your renewal.
+
+We look forward to another year of enrichment and learning together.
+
+
+CVV Montreal
+</textarea>
+<br>
+<div class="d-flex justify-content-between">
+    <div></div>
+    <div>
+      <a class="btn blueButton" href="{{ url_for('add_executive_member') }}" role="button">Mark as Reminded and Close</a>
+       <button type="button" class="btn blueButton" data-bs-dismiss="modal" aria-label="Close">Close</button>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base/base.html' %}
+{% block content %}
+
+
+  <h1>Content Management</h1>
+  <div class="col-md-12 container">
+    {% include 'executive_members/activities.html' %}
+    {% include 'executive_members/news.html' %}
+
+  </div>
+  <script src="{{ url_for('static', filename='js/fillExecutiveMember.js') }}"></script>
+{% endblock %}
