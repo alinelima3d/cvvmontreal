@@ -4,8 +4,8 @@ console.log("FILL EXECUTIVE MEMBER")
 
 
 
-
   // HIDE BOTAO Login
+
   document.getElementById("signIn").style.display = "none";
   // UNHIDE BOTAO USER
   document.getElementById("photo").style.display = "block";
@@ -18,6 +18,7 @@ console.log("FILL EXECUTIVE MEMBER")
       document.getElementById("photo").src = "/static/images/upload/executive_member_pics/" + out.executive_member_pic
     )
   .catch(err => console.log(err));
+  document.cookie = "usernameId=" + id;
   // document.getElementById("photo").src = "/static/images/executive_members/"+ id + ".png";
   // SE FOR MEMBER
     // HIDE EXECUTIVE MEMBER AREA

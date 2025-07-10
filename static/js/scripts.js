@@ -1,4 +1,3 @@
-console.log("RUN SCRIPTS.JS")
 function loginFn() {
   console.log("LOGIN");
   const email = document.getElementById("email").value;
@@ -8,8 +7,12 @@ function loginFn() {
   let url = '/get_executive_user/' + email;
   fetch(url)
   .then(res => res.json())
-  .then(out =>
-    window.location.href = "/executive_member_area/" + out.id)
+  .then(out => {
+    document.cookie = "user=aline";
+    window.location.href = "/executive_member_area/" + out.id;
+
+  })
+
   .catch(err => console.log(err));
 
   //checkLogin(email, pass)
@@ -140,4 +143,16 @@ function saveMembership() {
   saveBtn.style = "display:none"
   var cancelBtn = document.getElementById('cancelBtn');
   cancelBtn.style = "display:none"
+}
+
+function checkCookie() {
+  let username = getCookie("username");
+  if (username != "") {
+   alert("Welcome again " + username);
+  } else {
+    username = prompt("Please enter your name:", "");
+    if (username != "" && username != null) {
+      setCookie("username", username, 365);
+    }
+  }
 }
