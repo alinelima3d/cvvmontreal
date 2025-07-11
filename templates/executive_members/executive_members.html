@@ -7,7 +7,7 @@
     <div class="col">
       <div class="card">
         {% if our_executive_member.executive_member_pic %}
-          <img src="{{ url_for('static', filename='images/upload/executive_member_pics/' + our_executive_member.executive_member_pic|string) }}" class="card-img-top" alt="...">
+          <img src="{{ url_for('static', filename='upload/executive_member_pics/' + our_executive_member.executive_member_pic|string) }}" class="card-img-top" alt="...">
         {% else %}
           <img src="{{ url_for('static', filename='images/icons/user.png') }}" class="card-img-top" alt="...">
         {% endif %}

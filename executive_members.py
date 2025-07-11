@@ -121,15 +121,19 @@ def update_executive_member(id):
         executive_member_to_update.telephone = request.form["telephone"]
         executive_member_to_update.order = request.form["order"]
         executive_member_to_update.organization = request.form["organization"]
+        # executive_member_to_update.executive_member_pic = request.files["executive_member_pic"]
 
-        executive_member_to_update.executive_member_pic = request.files["executive_member_pic"]
+        # if request.form["update_pw"]:
+        #     hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
+        #     executive_member_to_update.password_hash = hashed_pw
 
         # Save file name to database
         if request.files["executive_member_pic"]:
-            pic_filename = secure_filename(executive_member_to_update.executive_member_pic.filename)
+            pic_filename = secure_filename(request.files["executive_member_pic"].filename)
             pic_name = str(uuid.uuid1()) + "_" + pic_filename
             # Save Image
-            executive_member_to_update.executive_member_pic.save(os.path.join(app.config["UPLOAD_FOLDER"], "executive_member_pics", pic_name))
+            print(request.files["executive_member_pic"])
+            request.files["executive_member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "executive_member_pics", pic_name))
             executive_member_to_update.executive_member_pic = pic_name
 
         try:
@@ -147,6 +151,32 @@ def update_executive_member(id):
                 deletable=True)
     else:
         return render_template("executive_members/update_executive_member.html",
+            form=form,
+            executive_member_to_update=executive_member_to_update,
+            deletable=True)
+
+@app.route('/update_executive_password/<int:id>', methods=['GET', 'POST'])
+def update_executive_password(id):
+    form = ExecutiveMemberForm()
+    executive_member_to_update = ExecutiveMembers.query.get_or_404(id)
+    if request.method == "POST":
+        hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
+        executive_member_to_update.password_hash = hashed_pw
+        try:
+            db.session.commit()
+            flash('Executive Member <strong>%s</strong> password updated successfully!' % executive_member_to_update.name)
+            return render_template("executive_members/update_executive_member.html",
+                form=form,
+                executive_member_to_update=executive_member_to_update,
+                deletable=True)
+        except:
+            flash("Error")
+            return render_template("executive_members/update_executive_member.html",
+                form=form,
+                executive_member_to_update=executive_member_to_update,
+                deletable=True)
+    else:
+        return render_template("executive_members/update_password.html",
             form=form,
             executive_member_to_update=executive_member_to_update,
             deletable=True)

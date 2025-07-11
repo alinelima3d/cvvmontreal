@@ -4,9 +4,9 @@ from wtforms.validators import DataRequired, EqualTo, Length
 
 
 class MemberForm(FlaskForm):
-    name = StringField("Name:", validators=[DataRequired()])
-    email = StringField("Email:", validators=[DataRequired()])
-    role = StringField("Role:", validators=[DataRequired()])
+    name = StringField("Name*:", validators=[DataRequired()])
+    email = StringField("Email*:", validators=[DataRequired()])
+    role = StringField("Role*:", validators=[DataRequired()])
     telephone = StringField("Phone Number:")
     english = BooleanField("English")
     french = BooleanField("French")
@@ -15,15 +15,16 @@ class MemberForm(FlaskForm):
     organization = StringField("Organization:")
     volunteers = IntegerField("Number Voluntters I manage:")
     member_pic = FileField("Member Pic:")
+    update_pw = BooleanField("Update Password")
     password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
     password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
 class ExecutiveMemberForm(FlaskForm):
-    name = StringField("Name:", validators=[DataRequired()])
-    email = StringField("Email:", validators=[DataRequired()])
-    role = StringField("Role:", validators=[DataRequired()])
+    name = StringField("Name*:", validators=[DataRequired()])
+    email = StringField("Email*:", validators=[DataRequired()])
+    role = StringField("Role*:", validators=[DataRequired()])
     bio = StringField("Bio:")
     telephone = StringField("Telephone:")
     english = BooleanField("English:")
@@ -32,6 +33,7 @@ class ExecutiveMemberForm(FlaskForm):
     organization = StringField("Organization:")
     order = IntegerField("Order:")
     executive_member_pic = FileField("Executive Member Pic:")
+    update_pw = BooleanField("Update Password")
     password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
     password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField("Update")

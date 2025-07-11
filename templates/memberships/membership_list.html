@@ -19,7 +19,7 @@
      {% for member_payment in member_payments %}
        <tr>
          {% if member_payment.member_pic %}
-          <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/upload/member_pics/' + member_payment.member_pic|string ) }}"></td>
+          <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='upload/member_pics/' + member_payment.member_pic|string ) }}"></td>
          {% else %}
           <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/icons/user.png') }}"></td>
          {% endif %}

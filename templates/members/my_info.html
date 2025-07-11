@@ -1,7 +1,7 @@
 <div class="col-md-12 shadow-lg rounded div-info" id="myInfo">
   <h3>My Info</h3>
     {% if member.member_pic %}
-     <td class="firstCol"><img class="photo_big" src="{{ url_for('static', filename='images/upload/member_pics/' + member.member_pic|string ) }}"></td>
+     <td class="firstCol"><img class="photo_big" src="{{ url_for('static', filename='upload/member_pics/' + member.member_pic|string ) }}"></td>
     {% else %}
      <td class="firstCol"><img class="photo_big" src="{{ url_for('static', filename='images/icons/user.png') }}"></td>
     {% endif %}

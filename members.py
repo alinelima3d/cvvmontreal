@@ -108,18 +108,19 @@ def update_member(id):
         member_to_update.telephone = request.form["telephone"]
         member_to_update.organization = request.form["organization"]
         member_to_update.volunteers = request.form["volunteers"]
-        member_to_update.member_pic = request.files["member_pic"]
+        # member_to_update.member_pic = request.files["member_pic"]
 
         # Save file name to database
-        pic_filename = secure_filename(member_to_update.member_pic.filename)
-        pic_name = str(uuid.uuid1()) + "_" + pic_filename
-        # Save Image
-        member_to_update.member_pic.save(os.path.join(app.config["UPLOAD_FOLDER"], "member_pics", pic_name))
-        member_to_update.member_pic = pic_name
+        if request.files["member_pic"]:
+            pic_filename = secure_filename(request.files["member_pic"])
+            pic_name = str(uuid.uuid1()) + "_" + pic_filename
+            # Save Image
+            request.files["member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "member_pics", pic_name))
+            member_to_update.member_pic = pic_name
 
         try:
             db.session.commit()
-            flash("User updated successfully!")
+            flash("Member updated successfully!")
             return render_template("members/update_member.html",
                 form=form,
                 member_to_update=member_to_update)
@@ -133,6 +134,29 @@ def update_member(id):
             form=form,
             member_to_update=member_to_update)
 
+
+@app.route('/update_member_password/<int:id>', methods=['GET', 'POST'])
+def update_member_password(id):
+    form = MemberForm()
+    member_to_update = Members.query.get_or_404(id)
+    if request.method == "POST":
+        hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
+        member_to_update.password_hash = hashed_pw
+        try:
+            db.session.commit()
+            flash("Member password updated successfully!")
+            return render_template("members/update_member.html",
+                form=form,
+                member_to_update=member_to_update)
+        except:
+            flash("Error: It was not possible to update this user password.")
+            return render_template("members/update_member.html",
+                form=form,
+                member_to_update=member_to_update)
+    else:
+        return render_template("members/update_password.html",
+            form=form,
+            member_to_update=member_to_update)
 
 @app.route('/delete_member/<int:id>', methods=['GET', 'POST'])
 def delete_member(id):

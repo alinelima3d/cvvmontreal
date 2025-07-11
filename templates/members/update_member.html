@@ -14,11 +14,14 @@
     {{ form.hidden_tag() }}
 
     {% if member_to_update.member_pic %}
-     <img class="photo_big" src="{{ url_for('static', filename='images/upload/member_pics/' + member_to_update.member_pic|string ) }}">
+     <img class="photo_big" src="{{ url_for('static', filename='upload/member_pics/' + member_to_update.member_pic|string ) }}">
     {% else %}
      <img class="photo_big" src="{{ url_for('static', filename='images/icons/user.png') }}">
     {% endif %}
     <br>
+    <a class="btn blueButton" href="{{ url_for('update_member_password', id=member_to_update.id) }}">Upate Password</a>
+    <br>
+
     <strong>{{ form.name.label(class="form-label") }}</strong>
     {{ form.name(class="form-control", value=member_to_update.name) }}
     <strong>{{ form.role.label(class="form-label") }}</strong>
@@ -34,9 +37,14 @@
     <strong>{{ form.member_pic.label(class="form-label") }}</strong>
     {{ form.member_pic(class="form-control", value=member_to_update.member_pic) }}
 
+    <br>
+
+
+
     <br/>
     {{ form.submit(class="btn blueButton") }}
     <a class="btn btn-danger" href="{{ url_for('delete_member', id=member_to_update.id) }}">Delete</a>
   </form>
+  <script src="{{ url_for('static', filename='js/forms.js') }}"></script>
 
 {% endblock %}

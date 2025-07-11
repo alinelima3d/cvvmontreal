@@ -1,34 +1,49 @@
 function loginFn() {
   const email = document.getElementById("email").value;
   const pass = document.getElementById("password").value;
+  const alertLogin = document.getElementById("alertLogin");
 
   //checkLogin(email, pass)
-  let url = '/get_executive_user/' + email;
-  fetch(url)
+  // let url = '/get_executive_member/' + email;
+
+  var url = "/check_login/"
+  let data = {
+    email: email,
+    pass: pass
+  }
+  let fetchData = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: new Headers({
+      'Content-Type': 'application/json; charset=UTF-8'
+    })
+  }
+
+  fetch(url, fetchData)
   .then(res => res.json())
   .then(out => {
-    sessionStorage.setItem('userId', out.id);
-    sessionStorage.setItem('isExecutiveMember', 'true');
-    window.location.href = "/executive_member_area/" + out.id;
+    if (out.error) {
+      alertLogin.innerHTML = out.error;
+      alertLogin.classList.add("show")
+      alertLogin.classList.remove("hide")
+      alertLogin.alert()
+    }
+    else {
+      sessionStorage.setItem('userId', out.id);
+      if (out.is_executive_member) {
+        sessionStorage.setItem('isExecutiveMember', 'true');
+        window.location.href = "/executive_member_area/" + out.id;
+      }
+      else {
+        sessionStorage.setItem('isExecutiveMember', 'false');
+        window.location.href = "/member_area/" + out.id;
+      }
+
+    }
+
   })
 
   .catch(err => console.log(err));
-
-  //checkLogin(email, pass)
-  let url_member = '/get_member/' + email;
-  fetch(url_member)
-  .then(res => res.json())
-  .then(out => {
-    sessionStorage.setItem('userId', out.id);
-    sessionStorage.setItem('isExecutiveMember', 'false');
-    window.location.href = "/member_area/" + out.id
-  })
-  .catch(err => console.log(err));
-
-  // se login for correto
-  // window.location.href = "/member_area";
-  var currentUserId = document.createElement("VAR");
-
 
 };
 
@@ -178,12 +193,12 @@ function showUserPhoto() {
   if (isExecutiveMember == 'true') {
     console.log('is em')
     var url_member = '/get_executive_member_id/' + id;
-    var photo_url = "/static/images/upload/executive_member_pics/"
+    var photo_url = "/static/upload/executive_member_pics/"
   }
   else {
     console.log('is not em')
     var url_member = '/get_member_id/' + id;
-    var photo_url = "/static/images/upload/member_pics/"
+    var photo_url = "/static/upload/member_pics/"
   }
   console.log(url_member)
   fetch(url_member)

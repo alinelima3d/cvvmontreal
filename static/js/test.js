@@ -1,7 +1,8 @@
 
 var url = "/get_member/"
 let data = {
-  email: 'aline3d@gmail.com'
+  email: 'member2@gmail.com',
+  pass: 'pass'
 }
 let fetchData = {
   method: 'POST',
