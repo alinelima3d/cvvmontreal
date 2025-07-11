@@ -4,6 +4,7 @@ from app import app, db, Members, Meetings, Memberships
 from webforms import MemberForm
 
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 import uuid as uuid
 import os
 
@@ -45,41 +46,50 @@ def add_member():
     # name = None
     form = MemberForm()
     if request.method == "POST":
+        print('POST')
         user = Members.query.filter_by(email=form.email.data).first()
         # Save file name to database
         pic_filename = secure_filename(request.files["member_pic"].filename)
         pic_name = str(uuid.uuid1()) + "_" + pic_filename
+        print('mid')
         # Save Image
         request.files["member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "member_pics", pic_name))
         form.member_pic.data = pic_name
-
+        print('PRE IF', user)
+        if user:
+            flash('Error: This email is already in our database!')
         if user is None:
+            print('entrou if')
+            hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
+            print('hashed_pw', hashed_pw)
             user = Members(
-            name=form.name.data,
-            role=form.role.data,
-            email=form.email.data,
-            telephone=form.telephone.data,
-            english=form.english.data,
-            french=form.french.data,
-            preferable=form.preferable.data,
-            organization=form.organization.data,
-            volunteers=form.volunteers.data,
-            member_pic=form.member_pic.data,
+                name=form.name.data,
+                role=form.role.data,
+                email=form.email.data,
+                telephone=form.telephone.data,
+                english=form.english.data,
+                french=form.french.data,
+                preferable=form.preferable.data,
+                organization=form.organization.data,
+                volunteers=form.volunteers.data,
+                member_pic=form.member_pic.data,
+                password_hash=hashed_pw,
             )
             db.session.add(user)
             db.session.commit()
             flash('Member <strong>%s</strong> added successfully!' % form.name.data)
-        # name = form.name.data
-        form.name.data = ''
-        form.role.data = ''
-        form.email.data = ''
-        form.telephone.data = ''
-        form.english.data = ''
-        form.french.data = ''
-        form.preferable.data = ''
-        form.organization.data = ''
-        form.volunteers.data = ''
-        form.member_pic.data = ''
+            print('post if')
+            # name = form.name.data
+            form.name.data = ''
+            form.role.data = ''
+            form.email.data = ''
+            form.telephone.data = ''
+            form.english.data = ''
+            form.french.data = ''
+            form.preferable.data = ''
+            form.organization.data = ''
+            form.volunteers.data = ''
+            form.member_pic.data = ''
 
     our_members = Members.query.order_by(Members.name)
     return render_template('members/add_member.html',
@@ -114,7 +124,7 @@ def update_member(id):
                 form=form,
                 member_to_update=member_to_update)
         except:
-            flash("Error")
+            flash("Error: It was not possible to update this user.")
             return render_template("members/update_member.html",
                 form=form,
                 member_to_update=member_to_update)
@@ -143,7 +153,7 @@ def delete_member(id):
             our_members=our_members,
             member_to_update=member_to_delete)
     except:
-        flash("Error")
+        flash("Error: It was not possible to delete this user.")
         our_members = Members.query.order_by(Members.name)
         return render_template('members/update_member.html',
             form = form,

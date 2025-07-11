@@ -6,7 +6,11 @@
     {% for our_executive_member in our_executive_members %}
     <div class="col">
       <div class="card">
-        <img src="{{ url_for('static', filename='images/executive_members/' + our_executive_member.id|string + '.png') }}" class="card-img-top" alt="...">
+        {% if our_executive_member.executive_member_pic %}
+          <img src="{{ url_for('static', filename='images/upload/executive_member_pics/' + our_executive_member.executive_member_pic|string) }}" class="card-img-top" alt="...">
+        {% else %}
+          <img src="{{ url_for('static', filename='images/icons/user.png') }}" class="card-img-top" alt="...">
+        {% endif %}
         <div class="card-body">
           <h5 class="card-title">{{ our_executive_member.name }}</h5>
           <p class="card-text">{{ our_executive_member.role }}</p>

@@ -4,6 +4,7 @@ from app import app, db, Members, ExecutiveMembers, Meetings, Memberships, Surve
 from webforms import ExecutiveMemberForm
 
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 import uuid as uuid
 import os
 
@@ -42,14 +43,14 @@ def executive_member_area(id):
         member_payment['memberships'] = memberships
         member_payments.append(member_payment)
     buttons = [
-        {"name": "My Info", "anchor": "myInfo"},
-        {"name": "Task Repartition", "anchor": "taskRepartition"},
-        {"name": "Payment Status", "anchor": "paymentList"},
-        {"name": "Member Attendance", "anchor": "attendanceList"},
-        {"name": "Surveys", "anchor": "surveysList"},
-        {"name": "Meetings", "anchor": "meetings_list"},
-        {"name": "Executive Members", "anchor": "executive_member_list"},
-        {"name": "Members", "anchor": "member_list"},
+        {"name": "My Info", "link": "#myInfo"},
+        {"name": "Task Repartition", "link": "#taskRepartition"},
+        {"name": "Payment Status", "link": "#paymentList"},
+        {"name": "Member Attendance", "link": "#attendanceList"},
+        {"name": "Surveys", "link": "#surveysList"},
+        {"name": "Meetings", "link": "#meetings_list"},
+        {"name": "Executive Members", "link": "#executive_member_list"},
+        {"name": "Members", "link": "#member_list"},
     ]
     return render_template('executive_members/executive_member_area.html',
         our_members=our_members,
@@ -70,6 +71,7 @@ def add_executive_member():
     form = ExecutiveMemberForm()
     if form.validate_on_submit():
         user = ExecutiveMembers.query.filter_by(email=form.email.data).first()
+        pic_name = ''
         # Save file name to database
 
         if user is None:
@@ -78,6 +80,7 @@ def add_executive_member():
                 pic_name = str(uuid.uuid1()) + "_" + pic_filename
                 # Save Image
                 request.files["executive_member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "executive_member_pics", pic_name))
+            hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
             executiveMember = ExecutiveMembers(
                 name=form.name.data,
                 email=form.email.data,
@@ -88,6 +91,7 @@ def add_executive_member():
                 telephone=form.telephone.data,
                 organization=form.organization.data,
                 executive_member_pic=pic_name,
+                password_hash=hashed_pw,
                 )
             db.session.add(executiveMember)
             db.session.commit()
@@ -96,6 +100,8 @@ def add_executive_member():
         name = form.name.data
         form.name.data = ''
         form.email.data = ''
+        form.password_hash.data = ''
+        form.password_hash2.data = ''
 
     our_executive_members = ExecutiveMembers.query.order_by(ExecutiveMembers.name)
     return render_template('executive_members/add_executive_member.html',

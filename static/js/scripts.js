@@ -1,26 +1,28 @@
 function loginFn() {
-  console.log("LOGIN");
   const email = document.getElementById("email").value;
-  //const pass = document.getElementById("password").value;
+  const pass = document.getElementById("password").value;
 
   //checkLogin(email, pass)
   let url = '/get_executive_user/' + email;
   fetch(url)
   .then(res => res.json())
   .then(out => {
-    document.cookie = "user=aline";
+    sessionStorage.setItem('userId', out.id);
+    sessionStorage.setItem('isExecutiveMember', 'true');
     window.location.href = "/executive_member_area/" + out.id;
-
   })
 
   .catch(err => console.log(err));
 
   //checkLogin(email, pass)
-  let url_member = '/get_user/' + email;
+  let url_member = '/get_member/' + email;
   fetch(url_member)
   .then(res => res.json())
-  .then(out =>
-      window.location.href = "/member_area/" + out.id)
+  .then(out => {
+    sessionStorage.setItem('userId', out.id);
+    sessionStorage.setItem('isExecutiveMember', 'false');
+    window.location.href = "/member_area/" + out.id
+  })
   .catch(err => console.log(err));
 
   // se login for correto
@@ -28,7 +30,14 @@ function loginFn() {
   var currentUserId = document.createElement("VAR");
 
 
+};
+
+function logout() {
+  sessionStorage.setItem('userId', '');
+  sessionStorage.setItem('isExecutiveMember', '');
+  window.location.href = "/";
 }
+
 
 // Modal
 var defaultModal = document.getElementById('defaultModal');
@@ -153,6 +162,68 @@ function checkCookie() {
     username = prompt("Please enter your name:", "");
     if (username != "" && username != null) {
       setCookie("username", username, 365);
+    }
+  }
+}
+
+function showUserPhoto() {
+  // HIDE BOTAO Login
+
+  document.getElementById("signIn").style.display = "none";
+  // UNHIDE BOTAO USER
+  document.getElementById("photo").style.display = "block";
+
+  let id = sessionStorage.getItem('userId');
+  let isExecutiveMember = sessionStorage.getItem('isExecutiveMember');
+  if (isExecutiveMember == 'true') {
+    console.log('is em')
+    var url_member = '/get_executive_member_id/' + id;
+    var photo_url = "/static/images/upload/executive_member_pics/"
+  }
+  else {
+    console.log('is not em')
+    var url_member = '/get_member_id/' + id;
+    var photo_url = "/static/images/upload/member_pics/"
+  }
+  console.log(url_member)
+  fetch(url_member)
+  .then(res => res.json())
+  .then(out =>
+    {
+      // window.location.href = "/member_area/" + out.id
+      if (isExecutiveMember == 'true') {
+        document.getElementById("photo").src = photo_url + out.executive_member_pic
+      }
+      else {
+        document.getElementById("photo").src = photo_url + out.member_pic
+      }
+    })
+  .catch(err => console.log(err));
+
+  // HIDE EXECUTIVE MEMBER AREA
+  if (isExecutiveMember == 'true') {
+    document.getElementById("member_area_menu").style.display = "none";
+    document.getElementById("executive_member_area_menu").style.display = "block";
+    document.getElementById("content_management_menu").style.display = "block";
+  }
+  else {
+    document.getElementById("member_area_menu").style.display = "block";
+    document.getElementById("executive_member_area_menu").style.display = "none";
+    document.getElementById("content_management_menu").style.display = "none";
+  }
+
+}
+function showLoginBnt() {
+  document.getElementById("signIn").style.display = "block";
+}
+function activateButton() {
+  var buttons = document.getElementsByClassName("subMenuButton");
+  for (let i = 0; i < buttons.length; i++) {
+    if (buttons[i].href == window.location.href) {
+      buttons[i].classList.add("subMenuButtonActive")
+    }
+    else {
+      buttons[i].classList.remove("subMenuButtonActive")
     }
   }
 }

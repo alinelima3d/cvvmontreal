@@ -5,9 +5,8 @@
   <div class="col-md-12 container">
        {% include 'members/my_info.html' %}
        {% include 'members/membership.html' %}
-       {% include 'executive_members/meetings.html' %}
+       {% include 'meetings/meetings_list.html' %}
        {% include 'members/member_list.html' %}
        <br>
   </div>
-  <script src="{{ url_for('static', filename='js/member.js') }}"></script>
 {% endblock %}

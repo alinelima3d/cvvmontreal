@@ -2,7 +2,11 @@
 {% block content %}
 
     {% for message in get_flashed_messages() %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {% if message.startswith("Error:") %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+       {% else %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+       {% endif %}
         {{ message|safe }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
@@ -41,6 +45,12 @@
 
       <strong>{{ form.member_pic.label(class="form-label") }}</strong>
       {{ form.member_pic(class="form-control") }}
+
+      <strong>{{ form.password_hash.label(class="form-label") }}</strong>
+      {{ form.password_hash(class="form-control") }}
+
+      <strong>{{ form.password_hash2.label(class="form-label") }}</strong>
+      {{ form.password_hash2(class="form-control") }}
 
 
       <br/>

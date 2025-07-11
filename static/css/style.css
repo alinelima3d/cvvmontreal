@@ -27,6 +27,7 @@ td, thead {
   border-radius: 4px;
   border-width: thin;
   margin: 10px;
+  display: none;
 }
 .signIn:hover {
   border-style: solid;
@@ -62,7 +63,13 @@ td, thead {
   opacity: 0.5;
   border-radius: 20px;
 }
-.active, .subMenuButton:hover {
+.subMenuButton:active, .subMenuButton:hover {
+  background-color: white;
+  color: black;
+  opacity: 0.5;
+  border-radius: 20px;
+}
+.subMenuButtonActive {
   background-color: white;
   color: black;
   opacity: 0.5;

@@ -19,6 +19,7 @@ import json
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, BooleanField, DateField, IntegerField
 from wtforms.validators import DataRequired
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -52,6 +53,19 @@ class Members(db.Model):
     volunteers = db.Column(db.Integer)
     member_since = db.Column(db.DateTime)
     member_pic = db.Column(db.String(400), nullable=True)
+    password_hash = db.Column(db.String(128))
+
+    @property
+    def password(self):
+        raise AttributeError('Password is not readable attribute!')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 
     # expiration_date = db.Column(db.DateTime)
     # an user can have many docs
@@ -73,6 +87,18 @@ class ExecutiveMembers(db.Model):
     organization = db.Column(db.String(100))
     order = db.Column(db.Integer)
     executive_member_pic = db.Column(db.String(400), nullable=True)
+    password_hash = db.Column(db.String(128))
+
+    @property
+    def password(self):
+        raise AttributeError('Password is not readable attribute!')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
     def __repr__(self):
@@ -179,7 +205,10 @@ def get_payment_status(last_membership):
     result['status'] = status
     result['warning_icon'] = warning_icon
     result['expiration_date'] = expiration_date
-    result['remembered'] = last_membership.remembered
+    if last_membership:
+        result['remembered'] = last_membership.remembered
+    else:
+        result['remembered'] = 0
     return result
 
 

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, DateField, IntegerField, FileField
-from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField, BooleanField, DateField, IntegerField, FileField, PasswordField, ValidationError
+from wtforms.validators import DataRequired, EqualTo, Length
 
 
 class MemberForm(FlaskForm):
@@ -15,6 +15,8 @@ class MemberForm(FlaskForm):
     organization = StringField("Organization:")
     volunteers = IntegerField("Number Voluntters I manage:")
     member_pic = FileField("Member Pic:")
+    password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
+    password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
@@ -30,6 +32,8 @@ class ExecutiveMemberForm(FlaskForm):
     organization = StringField("Organization:")
     order = IntegerField("Order:")
     executive_member_pic = FileField("Executive Member Pic:")
+    password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
+    password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField("Update")
 
 
