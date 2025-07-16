@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, flash, request
 
-from app import app, db, Members, ExecutiveMembers, Meetings, Memberships, Surveys, get_payment_status
+from app import app, db, Members, ExecutiveMembers, Meetings, Memberships, Surveys, get_payment_status, AnnualReports, Activities, News, Banners, Quotes, TaskRepartitionTexts, TaskRepartitionFiles
 from webforms import ExecutiveMemberForm
 
 from werkzeug.utils import secure_filename
@@ -18,6 +18,8 @@ def executive_member_area(id):
     executive_member = ExecutiveMembers.query.filter_by(id=id).first()
     surveys = Surveys.query.order_by(Surveys.title)
     meetings = Meetings.query.order_by(Meetings.date.desc())
+    task_repartitionText = TaskRepartitionTexts.query.get_or_404(1)
+    task_repartition_files = TaskRepartitionFiles.query.order_by(TaskRepartitionFiles.filename)
     member_payments = []
     for member in our_members:
 
@@ -63,6 +65,8 @@ def executive_member_area(id):
         executive_member=executive_member,
         member_payments=member_payments,
         deletable=True,
+        task_repartitionText=task_repartitionText,
+        task_repartition_files=task_repartition_files,
         form=form)
 
 @app.route('/add_executive_member', methods=['GET', 'POST'])
@@ -206,4 +210,23 @@ def delete_executive_member(id):
 
 @app.route('/content_management')
 def content_management():
-    return render_template('executive_members/content_management.html')
+    activities = Activities.query.order_by(Activities.title)
+    news = News.query.order_by(News.title)
+    annualReports = AnnualReports.query.order_by(AnnualReports.filename)
+    banners = Banners.query.order_by(Banners.filename)
+    quotes = Quotes.query.order_by(Quotes.title)
+    buttons = [
+        {"name": "Activities", "link": "#activities"},
+        {"name": "News", "link": "#news"},
+        {"name": "Annual Reports", "link": "#annualReports"},
+        {"name": "Banners", "link": "#banners"},
+        {"name": "Quotes", "link": "#quotes"},
+    ]
+    return render_template('content/content_management.html',
+        activities=activities,
+        news=news,
+        annualReports=annualReports,
+        banners=banners,
+        quotes=quotes,
+        buttons=buttons,
+    )

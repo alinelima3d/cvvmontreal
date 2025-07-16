@@ -242,3 +242,33 @@ function activateButton() {
     }
   }
 }
+
+function likeNews(id) {
+  console.log('like news: ' + id)
+  var url = "/add_likes_news/"
+  let data = {
+    id: id,
+  }
+  let fetchData = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: new Headers({
+      'Content-Type': 'application/json; charset=UTF-8'
+    })
+  }
+
+  fetch(url, fetchData)
+  .then(res => res.json())
+  .then(out => {
+    document.getElementById("likes").innerHTML = out.likes;
+
+
+  })
+}
+
+// const iframe = document.getElementById("iframeModal");
+// console.log("iframe: " + iframe);
+// const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+// var CKEDITOR = iframeDocument.getElementsByClassName("cke_contents")[0];
+// console.log("CKEDITOR" + CKEDITOR)
+// CKEDITOR.style = "height:900px"

@@ -14,13 +14,15 @@ import os
 def member_area(id):
     form = MemberForm()
     ## TODO: PEGAR ESSE ID DO APP
-    current_user_id = 1
+    app.config['current_user_id'] = id
+    app.config['is_executive_member'] = False
+
     our_members = Members.query.order_by(Members.name)
     meetings = Meetings.query.order_by(Meetings.date)
     member = Members.query.filter_by(id=id).first()
-    memberships = Memberships.query.filter_by(member_id=current_user_id)
-    first_membership = Memberships.query.filter_by(member_id=current_user_id).order_by(Memberships.end).first()
-    last_membership = Memberships.query.filter_by(member_id=current_user_id).order_by(Memberships.end.desc()).first()
+    memberships = Memberships.query.filter_by(member_id=id)
+    first_membership = Memberships.query.filter_by(member_id=id).order_by(Memberships.end).first()
+    last_membership = Memberships.query.filter_by(member_id=id).order_by(Memberships.end.desc()).first()
     buttons = [
         {"name": "My Info", "anchor": "myInfo"},
         {"name": "My Membership", "anchor": "myMembership"},

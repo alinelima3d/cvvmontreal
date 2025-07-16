@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, flash, request
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_ckeditor import CKEditor
 
 from webforms import MemberForm, ExecutiveMemberForm, SurveyForm, MeetingForm
 # from routes.members import members_page
@@ -15,6 +16,9 @@ from datetime import datetime, timedelta
 from datetime import date
 import json
 
+from werkzeug.utils import secure_filename
+import uuid as uuid
+import os
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, BooleanField, DateField, IntegerField
@@ -23,6 +27,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
+ckeditor = CKEditor(app)
+
 app.config['SECRET_KEY'] = 'my super secret key that no one is suppose to know'
 print('app.debug', app.debug)
 # if app.debug:
@@ -140,12 +146,14 @@ class Memberships(db.Model):
         return '<Name %r>' % self.name
 
 
-class Activity(db.Model):
+class Activities(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     text = db.Column(db.Text, nullable=False)
     date = db.Column(db.Date)
     file = db.Column(db.String(400))
+    filename = db.Column(db.String(200))
+    author = db.Column(db.String(100))
 
     def __repr__(self):
         return '<Name %r>' % self.title
@@ -156,17 +164,69 @@ class News(db.Model):
     text = db.Column(db.Text, nullable=False)
     date = db.Column(db.Date)
     file = db.Column(db.String(400))
+    author = db.Column(db.String(100))
+    type = db.Column(db.String(100))
+    likes = db.Column(db.Integer)
+
+    def add_like(self):
+        self.likes += 1
+        return True
 
     def __repr__(self):
         return '<Name %r>' % self.title
 
 class AnnualReports(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200))
+    filename = db.Column(db.String(200))
     file = db.Column(db.String(400))
+    visible = db.Column(db.Boolean)
 
     def __repr__(self):
-        return '<Name %r>' % self.name
+        return '<Title %r>' % self.title
+
+class TaskRepartitionFiles(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(200))
+    file = db.Column(db.String(400))
+    author = db.Column(db.String(100))
+
+    def __repr__(self):
+        return '<Title %r>' % self.title
+
+class TaskRepartitionTexts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    text = db.Column(db.Text)
+    author = db.Column(db.String(100))
+
+    def __repr__(self):
+        return '<Title %r>' % self.title
+
+class Banners(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(200))
+    file = db.Column(db.String(400))
+    visible = db.Column(db.Boolean)
+
+    def __repr__(self):
+        return '<Title %r>' % self.title
+
+class Quotes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    text = db.Column(db.String(400))
+    author = db.Column(db.String(100))
+    organization = db.Column(db.String(200))
+    visible = db.Column(db.Boolean)
+    fontSize = db.Column(db.Float)
+
+    def __repr__(self):
+        return '<Title %r>' % self.title
+
+# attendance = db.Table('attendance',
+#     db.Column('member_id', db.Integer, db.ForeignKey('members.id')),
+#     db.Column('meeting_id', db.Integer, db.ForeignKey('meetings.id'))
+# )
 
 ## ERROR -----------------------------------------------------
 @app.errorhandler(404)
@@ -179,7 +239,6 @@ def page_not_found(e):
 
 
 def get_payment_status(last_membership):
-    print('GET PAYMENT STATUS')
     result = {}
     today = date.today()
     status = "Membership Not Found"
@@ -212,8 +271,22 @@ def get_payment_status(last_membership):
     return result
 
 
+def save_file(file, folderName):
+    # Save file name to database
+    secure_filename_var = secure_filename(file.filename)
+    unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
+
+    # Save File
+    folder = os.path.join(app.config["UPLOAD_FOLDER"], "taskRepartitions")
+    try:
+        os.makedirs(folder)
+    except:
+        print('Not possible to create folder' + folder)
+    file.save(os.path.join(app.config["UPLOAD_FOLDER"], folderName, unique_filename))
+    return unique_filename
+
 # import declared routes
-import general, members, executive_members, memberships, meetings, surveys, api
+import general, members, executive_members, memberships, meetings, surveys, api, activities, annualReports, banners, news, quotes, taskRepartition
 
 if __name__ == '__main__':
     app.run()

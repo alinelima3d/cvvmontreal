@@ -155,3 +155,85 @@ td, thead {
   color: white;
   text-align: center;
 }
+
+/* Quota */
+.containerQuota {
+  position: relative;
+  width: 360px;
+}
+
+/* Top left text */
+.quotaDiv {
+  position: absolute;
+  top: 70px;
+  left: 16px;
+  font-size: 18px;
+  text-align: left;
+  text-align: left;
+  color: #084468;
+  font-weight: bold;
+  width: 90%;
+}
+/* Bottom left text */
+.quotaAuthorDiv {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+  text-align: left;
+  width: 100%;
+}
+.quoteAuthor {
+  position: absolute;
+  font-weight: bold;
+  font-size: 15px;
+  color: #084468;
+  bottom: 15px;
+}
+.quoteOrganization {
+  position: absolute;
+  bottom: 0px;
+  font-size: 12px;
+}
+
+
+.timeDiff {
+  color: red;
+  font-size: 25px;
+}
+.gray_text p {
+  color: #c7c5c5;
+}
+.gray_text h5, .gray_text h2, .gray_text h1 {
+  color: #c7c5c5;
+}
+.gray_text img {
+  opacity: 50%;
+}
+.newsType {
+  background-color: #123854;
+  color: white;
+  padding: 5px;
+  width: fit-content;
+}
+.newCard:hover {
+  border-color: #123854;
+  border-width: 2px;
+  cursor: pointer;
+}
+.likeLink {
+  color: hotpink;
+}
+.likeLink:hover {
+  cursor: pointer;
+
+}
+.cke_notifications_area
+{
+    display: none !important;
+}
+:host ::ng-deep .ck-editor__editable_inline {
+    min-height: 900px;
+}
+#cke_1_contents {
+  height: 450px !important;
+}

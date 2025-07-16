@@ -1,4 +1,3 @@
-
 activateButton();
 var userId = sessionStorage.getItem('userId');
 if (userId) {

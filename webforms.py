@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, DateField, IntegerField, FileField, PasswordField, ValidationError
+from wtforms import StringField, SubmitField, BooleanField, DateField, IntegerField, FloatField, FileField, TextAreaField, PasswordField, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Length
+from flask_ckeditor import CKEditorField
 
 
 class MemberForm(FlaskForm):
@@ -59,4 +60,60 @@ class MembershipForm(FlaskForm):
     end = DateField("End")
     remembered = DateField("Remembered")
     file = FileField("File")
+    submit = SubmitField("Submit")
+
+
+
+class ActivityForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    # text = TextAreaField("Text", validators=[DataRequired()])
+    text = CKEditorField("Text", validators=[DataRequired()])
+    date = DateField("Date")
+    file = FileField("File")
+    filename = StringField("Filename")
+    author = StringField("Author")
+    submit = SubmitField("Submit")
+
+class NewsForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    type = StringField("Type", validators=[DataRequired()])
+    text = CKEditorField("Text", validators=[DataRequired()])
+    date = DateField("Date")
+    file = FileField("File")
+    filename = StringField("Filename")
+    author = StringField("Author")
+    submit = SubmitField("Submit")
+
+class AnnualReportForm(FlaskForm):
+    filename = StringField("Filename")
+    file = FileField("File")
+    visible = BooleanField("Visible")
+    submit = SubmitField("Submit")
+
+class TaskRepartitionFileForm(FlaskForm):
+    filename = StringField("Filename")
+    file = FileField("File")
+    author = StringField("Author")
+    submit = SubmitField("Submit")
+
+class TaskRepartitionTextForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    # text = StringField("Text", validators=[DataRequired()])
+    text = CKEditorField("Text", validators=[DataRequired()])
+    author = StringField("Author")
+    submit = SubmitField("Submit")
+
+class BannerForm(FlaskForm):
+    filename = StringField("Filename")
+    file = FileField("File")
+    visible = BooleanField("Visible")
+    submit = SubmitField("Submit")
+
+class QuoteForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    text = StringField("Text", validators=[DataRequired()])
+    author = StringField("Author")
+    organization = StringField("Organization")
+    visible = BooleanField("Visible")
+    fontSize = FloatField("Font Size")
     submit = SubmitField("Submit")

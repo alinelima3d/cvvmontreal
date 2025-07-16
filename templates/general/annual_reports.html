@@ -1,4 +1,16 @@
 {% extends 'base/base.html' %}
 {% block content %}
   <h1>Annual Reports</h1>
+
+  <div class="col-md-12 shadow-lg rounded div-info" id="myMembership">
+    <div class="row">
+    {% for annualReport in annualReports %}
+     <div class="col-md-2">
+       <p class="text-center"><img src="{{ url_for('static', filename='images/icons/pdf.png') }}" style="width:100px" alt=""></p>
+       <p class="text-center"><a target="_blank" href="{{ url_for('static', filename='upload/memberships/' + annualReport.filename ) }}">{{ annualReport.filename }}</a></p>
+
+     </div>
+    {% endfor %}
+  </div>
+ </div>
 {% endblock %}

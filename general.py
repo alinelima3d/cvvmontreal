@@ -1,5 +1,8 @@
 from flask import Flask, render_template, jsonify, flash, request
-from app import app, ExecutiveMembers, Members
+from app import app, ExecutiveMembers, Members, Quotes, AnnualReports, Banners, Activities, News
+
+from datetime import date, timedelta
+from datetime import datetime
 
 about_buttons = [
     {"name": "Our Mission", "link": "/mission"},
@@ -7,13 +10,33 @@ about_buttons = [
     {"name": "Member Directory", "link": "/member_directory"},
     {"name": "Annual Reports", "link": "/annual_reports"},
 ]
+news_buttons = [
+    {"name": "News from the vol. ecosystem", "link": "/news"},
+    {"name": "Activity Calendar", "link": "/activity_calendar"},
+]
 
+def calculate_days_from_today(target_date, date_format="%Y-%m-%d"):
+    today = date.today()
+    # target_date = datetime.strptime(target_date_str, date_format).date()
+
+    delta = target_date - today
+
+    if delta.days > 0:
+        return f"{delta.days} days left!"
+    elif delta.days < 0:
+        return "passed"
+    else:
+        return "That's today!"
 
 @app.route('/')
 def index():
     clean = request.args.get('clean')
+    quotes = Quotes.query.filter_by(visible=True)
+    banner = Banners.query.filter_by(visible=True).first()
     return render_template('/general/index.html',
-        clean=clean)
+        clean=clean,
+        quotes=quotes,
+        banner=banner)
 
 @app.route('/about')
 def about():
@@ -24,13 +47,44 @@ def about():
 @app.route('/activity_calendar')
 def activity_calendar():
     clean = request.args.get('clean')
+    activities = Activities.query.order_by(Activities.date.desc())
+    activity_list = []
+    for activity in activities:
+        activityDict = {}
+        activityDict["title"] = activity.title
+        activityDict["text"] = activity.text
+        activityDict["date"] = activity.date
+        activityDict["file"] = activity.file
+
+
+        time_difference =calculate_days_from_today(activity.date)
+        activityDict["gray_text"] = ""
+        activityDict["time_difference"] = time_difference
+        if time_difference == "passed":
+            activityDict["gray_text"] = "gray_text"
+            activityDict["time_difference"] = ""
+
+        party = False
+        if time_difference == "That's today!":
+            party = True
+        activityDict["party"] = party
+        activity_list.append(activityDict)
+
     return render_template('general/activity_calendar.html',
-        clean=clean)
+        clean=clean,
+        activities=activity_list,
+        buttons=news_buttons
+    )
 
 @app.route('/annual_reports')
 def annual_reports():
+    annualReports = AnnualReports.query.order_by(AnnualReports.filename)
     clean = request.args.get('clean')
-    return render_template('/general/annual_reports.html', buttons=about_buttons)
+    return render_template('/general/annual_reports.html',
+        buttons=about_buttons,
+        clean=clean,
+        annualReports=annualReports
+    )
 
 @app.route('/contact_us')
 def contact_us():
@@ -69,9 +123,13 @@ def mission():
 
 @app.route('/news')
 def news():
+    news = News.query.order_by(News.date)
     clean = request.args.get('clean')
     return render_template('general/news.html',
-        clean=clean)
+        clean=clean,
+        news=news,
+        buttons=news_buttons,
+    )
 
 @app.route('/resources')
 def resources():

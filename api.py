@@ -1,6 +1,6 @@
 from flask import request
 
-from app import app, Members, Meetings, Memberships, ExecutiveMembers
+from app import app, db, Members, Meetings, Memberships, ExecutiveMembers, News
 from flask import jsonify
 import json
 
@@ -119,3 +119,12 @@ def get_executive_user_id(id):
 def get_users():
     app.config['USER'] = user
     return jsonify(user_data), 200
+
+@app.route('/add_likes_news/', methods = ['GET','POST'])
+def add_likes_news():
+    result = json.loads(request.data)
+    news = News.query.filter_by(id=result["id"]).first()
+    news.add_like()
+    db.session.commit()
+    returnVar = {'likes': news.likes}
+    return returnVar, 200
