@@ -32,6 +32,22 @@
     {{ form.telephone(class="form-control", value=member_to_update.telephone) }}
     <strong>{{ form.organization.label(class="form-label") }}</strong>
     {{ form.organization(class="form-control", value=member_to_update.organization) }}
+    <strong>{{ form.english.label(class="form-label") }}</strong>
+    {{ form.english(checked=member_to_update.english) }}<br/>
+    <strong>{{ form.french.label(class="form-label") }}</strong>
+    {{ form.french(checked=member_to_update.french) }}
+    <select name="preferable" id="preferable" class="form-control">
+      {% if member_to_update.preferable == "English" %}
+        <option value="English" selected>English</option>
+      {% else %}
+        <option value="English">English</option>
+      {% endif %}
+      {% if member_to_update.preferable == "French" %}
+        <option value="French" selected>French</option>
+      {% else %}
+        <option value="French">French</option>
+      {% endif %}
+    </select>
     <strong>{{ form.volunteers.label(class="form-label") }}</strong>
     {{ form.volunteers(class="form-control", value=member_to_update.volunteers) }}
     <strong>{{ form.member_pic.label(class="form-label") }}</strong>

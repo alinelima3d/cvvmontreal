@@ -17,12 +17,11 @@ def executive_member_area(id):
     form = ExecutiveMemberForm()
     executive_member = ExecutiveMembers.query.filter_by(id=id).first()
     surveys = Surveys.query.order_by(Surveys.title)
-    meetings = Meetings.query.order_by(Meetings.date.desc())
+    meetings = Meetings.query.order_by(Meetings.date)
     task_repartitionText = TaskRepartitionTexts.query.get_or_404(1)
     task_repartition_files = TaskRepartitionFiles.query.order_by(TaskRepartitionFiles.filename)
     member_payments = []
     for member in our_members:
-
         memberships = Memberships.query.filter_by(id=member.id).order_by(Memberships.start)
         first_membership = Memberships.query.filter_by(member_id=member.id).order_by(Memberships.end).first()
         last_membership = Memberships.query.filter_by(member_id=member.id).order_by(Memberships.end.desc()).first()
@@ -30,6 +29,18 @@ def executive_member_area(id):
         member_since = ""
         if first_membership:
             member_since = first_membership.start
+        meeetings_attendee = []
+        for meeting in member.meetings_attendance:
+            meeetings_attendee.append(meeting.date)
+        perc = 0
+        meetings_active = []
+        for meeting in meetings:
+            if member_since:
+                if meeting.date >= member_since:
+                    meetings_active.append(meeting.date)
+        if meetings_active:
+            perc = int((100*len(member.meetings_attendance))/len(meetings_active))
+
         member_payment = {
             'id': member.id,
             'name': member.name,
@@ -41,6 +52,9 @@ def executive_member_area(id):
             'member_since': member_since,
             'expiration_date': payment_status['expiration_date'],
             'member_pic': member.member_pic,
+            'meeetings_attendee': meeetings_attendee,
+            'meetings_active': meetings_active,
+            'perc': perc
         }
         member_payment['memberships'] = memberships
         member_payments.append(member_payment)
@@ -84,12 +98,13 @@ def add_executive_member():
                 pic_name = str(uuid.uuid1()) + "_" + pic_filename
                 # Save Image
                 request.files["executive_member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "executive_member_pics", pic_name))
+
             hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
             executiveMember = ExecutiveMembers(
                 name=form.name.data,
                 email=form.email.data,
-                # english=form.english.data,
-                # french=form.french.data,
+                english=form.english.data,
+                french=form.french.data,
                 role=form.role.data,
                 order=form.order.data,
                 telephone=form.telephone.data,
@@ -124,12 +139,11 @@ def update_executive_member(id):
         executive_member_to_update.email = request.form["email"]
         executive_member_to_update.telephone = request.form["telephone"]
         executive_member_to_update.order = request.form["order"]
+        executive_member_to_update.english = form.english.data
+        executive_member_to_update.french = form.french.data
+        executive_member_to_update.preferable = form.preferable.data
         executive_member_to_update.organization = request.form["organization"]
-        # executive_member_to_update.executive_member_pic = request.files["executive_member_pic"]
 
-        # if request.form["update_pw"]:
-        #     hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
-        #     executive_member_to_update.password_hash = hashed_pw
 
         # Save file name to database
         if request.files["executive_member_pic"]:
@@ -229,4 +243,43 @@ def content_management():
         banners=banners,
         quotes=quotes,
         buttons=buttons,
+    )
+
+@app.route('/update_meeting_attendance/<int:id>', methods=['GET', 'POST'])
+def update_meeting_attendance(id):
+    meeting = Meetings.query.filter_by(id=id).first()
+    members = Members.query.order_by(Members.name)
+    return render_template("executive_members/update_meeting_attendance.html",
+        meeting=meeting,
+        members=members,
+    )
+
+@app.route('/update_member_attendance/<int:id>', methods=['GET', 'POST'])
+def update_member_attendance(id):
+    member = Members.query.filter_by(id=id).first()
+    meetings = Meetings.query.order_by(Meetings.date)
+
+    memberships = Memberships.query.filter_by(id=member.id).order_by(Memberships.start)
+    first_membership = Memberships.query.filter_by(member_id=member.id).order_by(Memberships.end).first()
+    last_membership = Memberships.query.filter_by(member_id=member.id).order_by(Memberships.end.desc()).first()
+    payment_status = get_payment_status(last_membership)
+    member_since = ""
+    member_to = ""
+
+    if first_membership:
+        member_since = first_membership.start
+    if last_membership:
+        member_to = last_membership.end
+    meetings_active = []
+    for meeting in meetings:
+        if meeting.date >= member_since:
+            meetings_active.append(meeting)
+    perc = int((100*len(member.meetings_attendance))/len(meetings_active))
+
+    return render_template("executive_members/update_member_attendance.html",
+        meetings=meetings,
+        member=member,
+        member_since=member_since,
+        member_to=member_to,
+        perc=perc,
     )

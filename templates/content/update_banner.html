@@ -8,20 +8,21 @@
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   {% endfor %}
-  <form action="/update_annualReport/{{ annualReport_to_update.id }}" method="POST" enctype="multipart/form-data">
+  <form action="/update_banner/{{ banner_to_update.id }}" method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
 
-
     <strong>{{ form.file.label(class="form-label") }}</strong>
-    {{ form.file(class="form-control", value=annualReport_to_update.file) }}
+    {{ form.file(class="form-control", value=banner_to_update.file) }}
 
     <strong>{{ form.visible.label(class="form-label") }}</strong>
-    {{ form.visible(value=annualReport_to_update.visible) }}
+    {{ form.visible(checked=banner_to_update.visible) }}
+
+
 
 
     <br/>
     {{ form.submit(class="btn blueButton") }}
-    <a class="btn btn-danger" href="{{ url_for('delete_annualReport', id=annualReport_to_update.id) }}">Delete</a>
+    <a class="btn btn-danger" href="{{ url_for('delete_banner', id=banner_to_update.id) }}">Delete</a>
 
   </form>
 

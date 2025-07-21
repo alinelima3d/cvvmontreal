@@ -4,6 +4,7 @@
   <table class="table" id="usersTable">
     <thead>
       <tr>
+        <th scope="col" class="firstCol">Image</th>
         <th scope="col" class="firstCol">Title</th>
         <th scope="col">Date</th>
         <th scope="col">Edit</th>
@@ -12,6 +13,11 @@
   {% for activity in activities %}
 
     <tr>
+      {% if activity.file %}
+       <td class="firstCol" style="width:150px"><img class="photo_list_square" src="{{ url_for('static', filename='upload/activities/' + activity.file|string ) }}"></td>
+      {% else %}
+       <td></td>
+      {% endif %}
       <td class="firstCol">{{ activity.title }}</td>
       <td>{{ activity.date }}</td>
       <td><button class="btn" style="padding:0px" data-bs-toggle="modal" data-bs-target="#defaultModal" data-bs-url="{{ url_for('update_activity', id=activity.id) }}" data-bs-title="Update Member {{ activity.title }}"><i class="bi bi-gear"></i></button></td>

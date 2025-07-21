@@ -37,21 +37,36 @@ def add_membership(member_id):
     return render_template('/memberships/add_membership.html',
         form=form)
 
-@app.route('/update_membership/<int:id>')
-def update_membership(id):
+@app.route('/update_memberships/<int:id>')
+def update_memberships(id):
     member = Members.query.filter_by(id=id).first()
     first_membership = Memberships.query.filter_by(member_id=id).order_by(Memberships.end).first()
     last_membership = Memberships.query.filter_by(member_id=id).order_by(Memberships.end.desc()).first()
     memberships = Memberships.query.filter_by(member_id=id)
     payment_status = get_payment_status(last_membership)
-    return render_template('/memberships/update_membership.html',
+    return render_template('/memberships/update_memberships.html',
         member=member,
         first_membership=first_membership,
         last_membership=last_membership,
         memberships=memberships,
-        )
+    )
 
-
+@app.route('/update_membership/<int:id>', methods=['GET', 'POST'])
+def update_membership(id):
+    form = MembershipForm()
+    membership = Memberships.query.filter_by(id=id).first()
+    member = Members.query.filter_by(id=membership.member_id).first()
+    if form.validate_on_submit():
+        membership.start = form.start.data
+        membership.end = form.end.data
+        membership.remembered = form.remembered.data
+        db.session.commit()
+        flash("Membership updated successfully!")
+    return render_template('/memberships/update_membership.html',
+        form=form,
+        member=member,
+        membership=membership,
+    )
 
 @app.route('/remind/<int:id>')
 def remind(id):

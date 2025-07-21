@@ -15,12 +15,14 @@
       <div class="card-body">
         <h5 class="card-title">{{ activity.title }}</h5>
         <p class="card-text">{{ activity.text|safe }}</p>
+
+        <p class="card-text"><strong>When: </strong>{{ activity.date.strftime('%A, %B %d, %Y') }} at {{ activity.hour }}</p>
+        <p class="card-text"><strong>Where: </strong>{{ activity.address }}</p>
         <p class="timeDiff">{{ activity.time_difference}}
         {% if activity.party %}
           <img src="{{ url_for('static', filename='images/party.png' ) }}" alt="" style="width:50px">
         {% endif %}
         </p>
-        <p class="card-text {{ activity.gray_text }}"><small class="text-body-secondary">{{ activity.date }}</small></p>
       </div>
     </div>
   </div>

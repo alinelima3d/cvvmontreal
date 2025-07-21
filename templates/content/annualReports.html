@@ -14,11 +14,11 @@
     <tr>
       <td class="firstCol">
         <a target="_blank" href="{{ url_for('static', filename='upload/annualReports/' + annualReport.file|string ) }}">
-          {{ annualReport.filename }}
+          <i class="bi bi-file-pdf-fill" style="color:red"></i>{{ annualReport.filename }}
         </a>
       </td>
       <td>{{ annualReport.visible }}</td>
-      <td><button class="btn" style="padding:0px" data-bs-toggle="modal" data-bs-target="#defaultModal" data-bs-url="{{ url_for('update_annualReport', id=annualReport.id) }}" data-bs-title="Update Member {{ annualReport.filename }}"><i class="bi bi-gear"></i></button></td>
+      <td><button class="btn" style="padding:0px" data-bs-toggle="modal" data-bs-target="#defaultModal" data-bs-url="{{ url_for('update_annualReport', id=annualReport.id) }}" data-bs-title="Update Annual Report: {{ annualReport.filename }}"><i class="bi bi-gear"></i></button></td>
     </tr>
   {% endfor %}
   </table>

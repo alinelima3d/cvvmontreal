@@ -45,25 +45,23 @@ def member_area(id):
 
 @app.route('/add_member', methods=['GET', 'POST'])
 def add_member():
-    # name = None
     form = MemberForm()
     if request.method == "POST":
-        print('POST')
         user = Members.query.filter_by(email=form.email.data).first()
-        # Save file name to database
-        pic_filename = secure_filename(request.files["member_pic"].filename)
-        pic_name = str(uuid.uuid1()) + "_" + pic_filename
-        print('mid')
-        # Save Image
-        request.files["member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "member_pics", pic_name))
-        form.member_pic.data = pic_name
-        print('PRE IF', user)
+        
+        pic_name = ""
+        if request.files["member_pic"]:
+            # Save file name to database
+            pic_filename = secure_filename(request.files["member_pic"].filename)
+            pic_name = str(uuid.uuid1()) + "_" + pic_filename
+            # Save Image
+            request.files["member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "member_pics", pic_name))
+            form.member_pic.data = pic_name
+
         if user:
             flash('Error: This email is already in our database!')
         if user is None:
-            print('entrou if')
             hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
-            print('hashed_pw', hashed_pw)
             user = Members(
                 name=form.name.data,
                 role=form.role.data,
@@ -74,14 +72,12 @@ def add_member():
                 preferable=form.preferable.data,
                 organization=form.organization.data,
                 volunteers=form.volunteers.data,
-                member_pic=form.member_pic.data,
+                member_pic=pic_name,
                 password_hash=hashed_pw,
             )
             db.session.add(user)
             db.session.commit()
             flash('Member <strong>%s</strong> added successfully!' % form.name.data)
-            print('post if')
-            # name = form.name.data
             form.name.data = ''
             form.role.data = ''
             form.email.data = ''
@@ -110,6 +106,9 @@ def update_member(id):
         member_to_update.telephone = request.form["telephone"]
         member_to_update.organization = request.form["organization"]
         member_to_update.volunteers = request.form["volunteers"]
+        member_to_update.english = form.english.data
+        member_to_update.french = form.french.data
+        member_to_update.preferable = form.preferable.data
         # member_to_update.member_pic = request.files["member_pic"]
 
         # Save file name to database

@@ -54,6 +54,9 @@ def activity_calendar():
         activityDict["title"] = activity.title
         activityDict["text"] = activity.text
         activityDict["date"] = activity.date
+        activityDict["hour"] = activity.hour
+        activityDict["when"] = "%s at %s" % (activity.date, activity.hour)
+        activityDict["address"] = activity.address
         activityDict["file"] = activity.file
 
 

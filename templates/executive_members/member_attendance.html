@@ -1,4 +1,8 @@
 <div class="col-md-12 shadow-lg rounded div-info" id="attendanceList">
+  <!-- <div class="alert alert-danger fade hide" id="alertAttendance" role="alert">
+  </div>
+  <div class="alert alert-warning fade hide" id="warningAttendance" role="alert">
+  </div> -->
    <h3>Member Attendance</h3>
 
    <div class="input-group">
@@ -20,20 +24,35 @@
            <th scope="col" class="firstCol"></th>
            <th scope="col" class="firstCol">Name</th>
            {% for meeting in meetings %}
-            <th scope="col">{{ meeting.date.strftime('%Y-%m-%d') }}</th>
+            <th scope="col">
+              <button class="btn" style="padding:0px" data-bs-toggle="modal" data-bs-target="#defaultModal" data-bs-url="{{ url_for('update_meeting_attendance', id=meeting.id) }}" data-bs-title="Update Meeting Attendance: {{ meeting.date.strftime('%Y-%m-%d') }}">{{ meeting.date.strftime('%Y-%m-%d') }}</button>
+
+            </th>
            {% endfor %}
          </tr>
        </thead>
-     {% for our_member in our_members %}
+       {% for our_member in member_payments %}
        <tr>
          {% if our_member.member_pic %}
-          <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='upload/member_pics/' + our_member.member_pic|string ) }}"></td>
+          <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='upload/member_pics/' + our_member.member_pic|string ) }}">
+          </td>
          {% else %}
           <td class="firstCol"><img class="photo_list" src="{{ url_for('static', filename='images/icons/user.png') }}"></td>
          {% endif %}
-         <td class="firstCol">{{ our_member.name }} (100%)</td>
+         <td class="firstCol">
+           <button class="btn" style="padding:0px" data-bs-toggle="modal" data-bs-target="#defaultModal" data-bs-url="{{ url_for('update_member_attendance', id=our_member.id) }}" data-bs-title="Update Member Attendance: {{ our_member.name }}">{{ our_member.name }} ({{ our_member.perc }}%)</button>
+
+         </td>
          {% for meeting in meetings %}
-          <td><i class="bi bi-check2-circle" style="color:green"></i></td>
+          {% if meeting.date in our_member.meetings_active %}
+            {% if meeting.date in our_member.meeetings_attendee %}
+              <td><input class="checkboxAttendance" type="checkbox" id="{{ our_member.id}}_{{ meeting.id}}" name="attendance" value="" checked></td>
+            {% else %}
+              <td><input class="checkboxAttendance" type="checkbox" id="{{ our_member.id}}_{{ meeting.id}}" name="attendance" value=""></td>
+              {% endif %}
+            {% else %}
+              <td></td>
+            {% endif %}
          {% endfor %}
        </tr>
      {% endfor %}
@@ -42,6 +61,7 @@
     <div class="d-flex justify-content-between">
         <div></div>
         <div>
+          <a class="btn blueButton" onClick="changeStatuses()" role="button">Save</a>
            <a class="btn blueButton" href="{{ url_for('add_executive_member') }}" role="button">Download</a>
         </div>
    </div>

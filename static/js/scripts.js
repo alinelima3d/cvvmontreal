@@ -42,7 +42,6 @@ function loginFn() {
     }
 
   })
-
   .catch(err => console.log(err));
 
 };
@@ -80,44 +79,12 @@ if (defaultModal) {
   })
 }
 
-function addMembership(member_id) {
+function addMembership(member_id, member_name) {
   var iframeModal = window.parent.document.getElementById('iframeModal');
-  console.log('member_id')
-  console.log(member_id)
   var url = "/add_membership/" + member_id
   iframeModal.src = url;
-
-  // change title do modal para add new
-
-  // console.log("add membership")
-  // var newBtn = document.getElementById('newBtn');
-  // newBtn.style = "display:none"
-  // var saveBtn = document.getElementById('saveBtn');
-  // saveBtn.style = "display:block"
-  // var cancelBtn = document.getElementById('cancelBtn');
-  // cancelBtn.style = "display:block"
-  // var table = document.getElementById('membershipTable');
-  // var row = table.insertRow(-1);
-  // var cell1 = row.insertCell(0);
-  // var cell2 = row.insertCell(1);
-  // var cell3 = row.insertCell(2);
-  // var cell4 = row.insertCell(3);
-  // cell1.style = "background-color: #ffffa6"
-  // cell2.style = "background-color: #ffffa6; margin-bottom:8px"
-  // cell3.style = "background-color: #ffffa6; margin-bottom:8px"
-  // // cell4.style = "background-color: #ffffa6; margin-bottom:8px"
-  // cell1.innerHTML = '<button class="btn blueButton">Upload bill</button>';
-  // const today = new Date();
-  // const year = today.getFullYear();
-  // const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
-  // const day = String(today.getDate()).padStart(2, '0');
-  //
-  // const formattedDate = `${year}-${month}-${day}`;
-  // const formattedDateEnd = `${year+1}-${month}-${day}`;
-  // cell2.innerHTML = '<input type="text" id="start" placeholder="YYYY-mm-dd" value="' + formattedDate + '" name="start" style="margin-bottom:8px">';
-  // cell3.innerHTML = '<input type="text" id="end" placeholder="YYYY-mm-dd" value="' + formattedDateEnd + '" name="end" style="margin-bottom:8px">';
-  // // cell4.innerHTML = '<input type="text" id="warned" placeholder="YYYY-mm-dd" name="fname" style="margin-bottom:8px">';
-
+  var defaultModalLabel = window.parent.document.getElementById("defaultModalLabel");
+  defaultModalLabel.innerHTML = "Add Membership " + member_name;
 }
 
 function cancelMembership() {
@@ -266,9 +233,73 @@ function likeNews(id) {
   })
 }
 
-// const iframe = document.getElementById("iframeModal");
-// console.log("iframe: " + iframe);
-// const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-// var CKEDITOR = iframeDocument.getElementsByClassName("cke_contents")[0];
-// console.log("CKEDITOR" + CKEDITOR)
-// CKEDITOR.style = "height:900px"
+
+function changeStatuses() {
+  var checkboxes = document.getElementsByClassName("checkboxAttendance")
+  for (let i = 0; i < checkboxes.length; i++) {
+    console.log("id " + checkboxes[i].id)
+    var splits = checkboxes[i].id.split("_")
+    var member = splits[0];
+    var meeting = splits[1];
+    var checked = checkboxes[i].checked;
+    console.log("member" + member)
+    console.log("meeting" + meeting)
+    console.log("checked" + checkboxes[i].checked)
+
+    if (member) {
+      var url = "/change_attendance/"
+      let data = {
+        member: member,
+        meeting: meeting,
+        checked: checked
+      }
+      let fetchData = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+          'Content-Type': 'application/json; charset=UTF-8'
+        })
+      }
+
+      fetch(url, fetchData)
+      .then(res => res.json())
+      .then(out => {
+        if (out.error) {
+          // const alertAttendance = document.getElementById("alertAttendance");
+          // alertAttendance.innerHTML = out.error;
+          // alertAttendance.classList.add("show")
+          // alertAttendance.classList.remove("hide")
+          // alertAttendance.alert()
+        }
+        else {
+          // const wwarningAttendance = document.getElementById("warningAttendance");
+          // wwarningAttendance.innerHTML = out.result;
+          // wwarningAttendance.classList.add("show")
+          // wwarningAttendance.classList.remove("hide")
+          // wwarningAttendance.alert()
+        }
+      })
+      .catch(err => console.log(err));
+    }
+  }
+
+}
+
+function checkAll() {
+  var checkboxes = document.getElementsByClassName("checkboxAttendance")
+  for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = true;
+  }
+}
+function uncheckAll() {
+  var checkboxes = document.getElementsByClassName("checkboxAttendance")
+  for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = false;
+  }
+}
+function editMembership(membership_id) {
+  var iframeModal = window.parent.document.getElementById('iframeModal');
+  var url = "/update_membership/" + membership_id
+  iframeModal.src = url;
+
+}

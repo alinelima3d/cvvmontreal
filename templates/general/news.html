@@ -5,12 +5,11 @@
   <br>
   <div class="row row-cols-1 row-cols-md-3 g-4">
   {% for new in news %}
-  <div class="card newCard" onClick="window.location.href='/news/{{ new.id }}';" style="width: 25rem; margin: 10px">
-    <img src="{{ url_for('static', filename='upload/news/' + new.file|string ) }}" class="card-img-top" alt="...">
+  <div class="card newCard" onClick="window.location.href='/news/{{ new.id }}';" style="width: 25rem; margin: 10px; padding: 0px">
+    <img src="{{ url_for('static', filename='upload/news/' + new.file|string ) }}" class="card-img-top newsImage" alt="...">
     <div class="card-body">
       <p class="card-title newsType">{{ new.type }}</p>
       <h5 class="card-title">{{ new.title }}</h5>
-      <p class="likeLink"><strong><i class="bi bi-heart"></i> <span id="likes">{{ new.likes }}</span></strong></p>
     </div>
   </div>
   {% endfor %}

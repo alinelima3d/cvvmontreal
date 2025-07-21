@@ -45,6 +45,11 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
+attendance = db.Table('attendance',
+    db.Column('member_id', db.Integer, db.ForeignKey('members.id')),
+    db.Column('meeting_id', db.Integer, db.ForeignKey('meetings.id'))
+)
+
 # Database Model
 class Members(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,12 +59,13 @@ class Members(db.Model):
     telephone = db.Column(db.String(20))
     english = db.Column(db.Boolean)
     french = db.Column(db.Boolean)
-    preferable = db.Column(db.Integer)
+    preferable = db.Column(db.String(100))
     organization = db.Column(db.String(100))
     volunteers = db.Column(db.Integer)
     member_since = db.Column(db.DateTime)
     member_pic = db.Column(db.String(400), nullable=True)
     password_hash = db.Column(db.String(128))
+    meetings_attendance = db.relationship('Meetings', secondary=attendance, backref='member_attendance')
 
     @property
     def password(self):
@@ -89,7 +95,7 @@ class ExecutiveMembers(db.Model):
     telephone = db.Column(db.String(20))
     english = db.Column(db.Boolean)
     french = db.Column(db.Boolean)
-    preferable = db.Column(db.Integer)
+    preferable = db.Column(db.String(100))
     organization = db.Column(db.String(100))
     order = db.Column(db.Integer)
     executive_member_pic = db.Column(db.String(400), nullable=True)
@@ -151,6 +157,8 @@ class Activities(db.Model):
     title = db.Column(db.String(100), nullable=False)
     text = db.Column(db.Text, nullable=False)
     date = db.Column(db.Date)
+    hour = db.Column(db.String(100))
+    address = db.Column(db.String(200))
     file = db.Column(db.String(400))
     filename = db.Column(db.String(200))
     author = db.Column(db.String(100))
@@ -166,7 +174,6 @@ class News(db.Model):
     file = db.Column(db.String(400))
     author = db.Column(db.String(100))
     type = db.Column(db.String(100))
-    likes = db.Column(db.Integer)
 
     def add_like(self):
         self.likes += 1
@@ -214,7 +221,7 @@ class Banners(db.Model):
 class Quotes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
-    text = db.Column(db.String(400))
+    text = db.Column(db.Text, nullable=False)
     author = db.Column(db.String(100))
     organization = db.Column(db.String(200))
     visible = db.Column(db.Boolean)
@@ -223,10 +230,7 @@ class Quotes(db.Model):
     def __repr__(self):
         return '<Title %r>' % self.title
 
-# attendance = db.Table('attendance',
-#     db.Column('member_id', db.Integer, db.ForeignKey('members.id')),
-#     db.Column('meeting_id', db.Integer, db.ForeignKey('meetings.id'))
-# )
+
 
 ## ERROR -----------------------------------------------------
 @app.errorhandler(404)

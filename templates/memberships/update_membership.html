@@ -1,62 +1,34 @@
 {% extends 'base/base_iframe.html' %}
-
 {% block content %}
 
-{% for message in get_flashed_messages() %}
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-{% endfor %}
-
-<p>
-<span><strong>Name:</strong> {{ member.name }}</span><br>
-<span><strong>Role:</strong> {{ member.role }}</span><br>
-<span><strong>Email:</strong> {{ member.email }}</span><br>
-<span><strong>organization:</strong> {{ member.organization }}</span><br>
-<span><strong>Member Since:</strong></span>
-
-  {% if first_membership %}
-    {{ first_membership.start.strftime('%Y-%m-%d') }}
-  {% endif %}
-<br>
-<strong>Expiration Date:</strong>
-  {% if last_membership %}
-    {{ last_membership.end.strftime('%Y-%m-%d') }}
-  {% endif %}
-</p>
-<br/>
-<h2>Memberships</h2>
-<table class="table" id="membershipTable">
-  <thead>
-    <tr>
-      <th scope="col" class="firstCol">File</th>
-      <th scope="col" class="">Start</th>
-      <th scope="col" class="">End</th>
-      <th scope="col" class="">Reminded</th>
-      <th scope="col" class="">Edit</th>
-    </tr>
-    {% for membership in memberships %}
-      <tr>
-        <td class="firstCol"><a target="_blank" href="{{ url_for('static', filename='upload/memberships/' + membership.file|string ) }}"><i class="bi bi-file-pdf-fill" style="color:red"></i>{{ membership.name }}</a></td>
-        <td>{{ membership.start.strftime('%Y-%m-%d') }}</td>
-        <td>{{ membership.end.strftime('%Y-%m-%d') }}</td>
-        {% if membership.warned %}
-          <td>{{  membership.warned }}</td>
-        {% else %}
-          <td></td>
-        {% endif %}
-        <td><button class="btn" style="padding:0px"><i class="bi bi-gear"></i></button></td>
-      </tr>
+    {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message|safe }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     {% endfor %}
-  </thead>
-</table>
-<div class="d-flex justify-content-between">
-    <div></div>
-    <div>
-      <a class="btn blueButton" id="saveBtn" onClick="saveMembership()" role="button" style="display:none">Save</a>
-      <a class="btn btn-warning" id="cancelBtn" onClick="cancelMembership()" role="button" style="display:none">Cancel</a>
-      <a class="btn blueButton" id="newBtn" onClick="addMembership({{ member.id }})" role="button">Add Membership</a>
-    </div>
-</div>
+
+    <form method="POST" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+
+      <strong>{{ form.file.label(class="form-label") }}</strong>
+      {{ form.file(class="form-control", value=membership.file) }}
+
+      <strong>{{ form.start.label(class="form-label") }}</strong>
+      {{ form.start(class="form-control", value=membership.start) }}
+
+      <strong>{{ form.end.label(class="form-label") }}</strong>
+      {{ form.end(class="form-control", value=membership.end) }}
+
+      <strong>{{ form.remembered.label(class="form-label") }}</strong>
+      {{ form.remembered(class="form-control", value=membership.remembered) }}
+
+
+
+
+
+      <br/>
+      {{ form.submit(class="btn blueButton") }}
+
+    </form>
 {% endblock %}

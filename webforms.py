@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, DateField, IntegerField, FloatField, FileField, TextAreaField, PasswordField, ValidationError
+from wtforms import StringField, SubmitField, BooleanField, DateField, IntegerField, FloatField, FileField, TextAreaField, PasswordField, ValidationError, SelectField
 from wtforms.validators import DataRequired, EqualTo, Length
 from flask_ckeditor import CKEditorField
 
@@ -11,8 +11,10 @@ class MemberForm(FlaskForm):
     telephone = StringField("Phone Number:")
     english = BooleanField("English")
     french = BooleanField("French")
-    preferable = IntegerField("Preferable:")
-    # preferable = SelectField('Preferable:', choices=[('1', 'English'), ('2', 'French')], validators=[InputRequired()])
+    preferable = SelectField('Preferable:', choices=[
+            ('English', 'English'),
+            ('French', 'French'),
+        ])
     organization = StringField("Organization:")
     volunteers = IntegerField("Number Voluntters I manage:")
     member_pic = FileField("Member Pic:")
@@ -30,7 +32,10 @@ class ExecutiveMemberForm(FlaskForm):
     telephone = StringField("Telephone:")
     english = BooleanField("English:")
     french = BooleanField("French:")
-    preferable = IntegerField("Preferable:")
+    preferable = SelectField('Preferable:', choices=[
+            ('English', 'English'),
+            ('French', 'French'),
+        ])
     organization = StringField("Organization:")
     order = IntegerField("Order:")
     executive_member_pic = FileField("Executive Member Pic:")
@@ -58,17 +63,17 @@ class MeetingForm(FlaskForm):
 class MembershipForm(FlaskForm):
     start = DateField("Start")
     end = DateField("End")
-    remembered = DateField("Remembered")
+    remembered = DateField("Reminded")
     file = FileField("File")
     submit = SubmitField("Submit")
-
-
 
 class ActivityForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     # text = TextAreaField("Text", validators=[DataRequired()])
     text = CKEditorField("Text", validators=[DataRequired()])
     date = DateField("Date")
+    hour = StringField("Hour")
+    address = StringField("Address")
     file = FileField("File")
     filename = StringField("Filename")
     author = StringField("Author")
@@ -111,7 +116,7 @@ class BannerForm(FlaskForm):
 
 class QuoteForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
-    text = StringField("Text", validators=[DataRequired()])
+    text = TextAreaField("Text", validators=[DataRequired()])
     author = StringField("Author")
     organization = StringField("Organization")
     visible = BooleanField("Visible")

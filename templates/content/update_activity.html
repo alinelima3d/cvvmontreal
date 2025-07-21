@@ -20,13 +20,19 @@
     <strong>{{ form.date.label(class="form-label") }}</strong>
     {{ form.date(class="form-control", value=activity_to_update.date) }}
 
+    <strong>{{ form.hour.label(class="form-label") }}</strong>
+    {{ form.hour(class="form-control", value=activity_to_update.hour) }}
+
+    <strong>{{ form.address.label(class="form-label") }}</strong>
+    {{ form.address(class="form-control", value=activity_to_update.address) }}
+
     <strong>{{ form.file.label(class="form-label") }}</strong>
     {{ form.file(class="form-control", value=activity_to_update.file) }}
 
 
     <br/>
     {{ form.submit(class="btn blueButton") }}
-    <a class="btn btn-danger" href="{{ url_for('delete_task_repartition_file', id=activity_to_update.id) }}">Delete</a>
+    <a class="btn btn-danger" href="{{ url_for('delete_activity', id=activity_to_update.id) }}">Delete</a>
 
   </form>
 

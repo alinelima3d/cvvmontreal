@@ -1,6 +1,6 @@
 from flask import request
 
-from app import app, db, Members, Meetings, Memberships, ExecutiveMembers, News
+from app import app, db, Members, Meetings, Memberships, ExecutiveMembers, News, attendance
 from flask import jsonify
 import json
 
@@ -127,4 +127,41 @@ def add_likes_news():
     news.add_like()
     db.session.commit()
     returnVar = {'likes': news.likes}
+    return returnVar, 200
+
+@app.route('/change_attendance/', methods = ['GET','POST'])
+def change_attendance():
+    result = json.loads(request.data)
+    print('result', result)
+    meeting = Meetings.query.filter_by(id=result["meeting"]).first()
+    member = Members.query.filter_by(id=result["member"]).first()
+    returnVar = {}
+    if result["checked"]:
+        if not member in meeting.member_attendance:
+            member.meetings_attendance.append(meeting)
+            try:
+                db.session.commit()
+            except:
+                returnVar["error"] = "Not possible to save Meeting Attendance"
+    else:
+        if member in meeting.member_attendance:
+            member.meetings_attendance.remove(meeting)
+            try:
+                db.session.commit()
+            except:
+                returnVar["error"] = "Not possible to save Meeting Attendance"
+    if not "error" in returnVar:
+        returnVar["result"] = "Attendance saved successfully."
+    return returnVar, 200
+
+@app.route('/clear_attendance/', methods = ['GET','POST'])
+def clear_attendance():
+    meetings = Meetings.query.order_by(Meetings.id)
+    member = Members.query.filter_by(id=Members.id).first()
+    for meeting in meetings:
+    #     for member in members:
+        if member in meeting.member_attendance:
+            member.meetings_attendance = []
+            db.session.commit()
+    returnVar = {}
     return returnVar, 200

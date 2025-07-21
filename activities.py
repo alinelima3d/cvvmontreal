@@ -27,6 +27,8 @@ def add_activity():
                 title=form.title.data,
                 text=form.text.data,
                 date=form.date.data,
+                hour=form.hour.data,
+                address=form.address.data,
                 file=form.file.data,
             )
             db.session.add(activity)
@@ -36,7 +38,10 @@ def add_activity():
             form.title.data = ''
             form.text.data = ''
             form.date.data = ''
+            form.hour.data = ''
+            form.address.data = ''
             form.file.data = ''
+        flash("Error: An activity with this title already exists.")
 
 
     return render_template('content/add_activity.html',
@@ -49,20 +54,23 @@ def update_activity(id):
     form = ActivityForm()
     activity_to_update = Activities.query.get_or_404(id)
     if request.method == "POST":
-        folder = os.path.join(app.config["UPLOAD_FOLDER"], "activities")
-        file = os.path.join(folder, activity_to_update.file)
-        try:
-            os.remove(file)
-        except:
-            print('Not possible to delete file ' + file)
+        if request.files["file"]:
+            folder = os.path.join(app.config["UPLOAD_FOLDER"], "activities")
+            file = os.path.join(folder, activity_to_update.file)
+            try:
+                os.remove(file)
+            except:
+                print('Not possible to delete file ' + file)
 
-        unique_filename = save_file(request.files["file"], "activities")
+            unique_filename = save_file(request.files["file"], "activities")
 
-        activity_to_update.file = unique_filename
-        activity_to_update.filename = request.files["file"].filename
+            activity_to_update.file = unique_filename
+            activity_to_update.filename = request.files["file"].filename
 
-        activity_to_update.text = form.text.data
+        activity_to_update.text = request.form.get('ckeditor')
         activity_to_update.date = form.date.data
+        activity_to_update.hour = form.hour.data
+        activity_to_update.address = form.address.data
         activity_to_update.title = form.title.data
 
         try:
@@ -80,3 +88,29 @@ def update_activity(id):
         return render_template("content/update_activity.html",
             form=form,
             activity_to_update=activity_to_update)
+
+
+@app.route('/delete_activity/<int:id>', methods=['GET', 'POST'])
+def delete_activity(id):
+    activity_to_delete = Activities.query.get_or_404(id)
+    form = ActivityForm()
+    try:
+        db.session.delete(activity_to_delete)
+        db.session.commit()
+        flash("Activity deleted successfully!")
+
+        form.title.data = ''
+        form.text.data = ''
+        form.date.data = ''
+        form.hour.data = ''
+        form.address.data = ''
+        form.file.data = ''
+
+        return render_template('content/update_activity.html',
+            form = form,
+            activity_to_delete=activity_to_delete)
+    except:
+        flash("Error: Not possible to delete activity.")
+        return render_template('content/update_activity.html',
+            form = form,
+            activity_to_delete=activity_to_delete)

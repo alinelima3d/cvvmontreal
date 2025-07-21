@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, flash, request
-from app import app, db, Members, AnnualReports
+from app import app, db, Members, AnnualReports, save_file
 from webforms import AnnualReportForm
 
 from werkzeug.utils import secure_filename
@@ -44,39 +44,57 @@ def add_annualReport():
 
 @app.route('/update_annualReport/<int:id>', methods=['GET', 'POST'])
 def update_annualReport(id):
-    form = MeetingForm()
-    date = None
-    meeting_to_update = Meetings.query.get_or_404(id)
+    form = AnnualReportForm()
+    annualReport_to_update = AnnualReports.query.get_or_404(id)
     if request.method == "POST":
-        meeting_to_update.date = request.form["date"]
+        if request.files["file"]:
+            folder = os.path.join(app.config["UPLOAD_FOLDER"], "activities")
+            file = os.path.join(folder, annualReport_to_update.file)
+            try:
+                os.remove(file)
+            except:
+                print('Not possible to delete file ' + file)
 
-        meeting_to_update.attendees = request.form["attendees"]
+            unique_filename = save_file(request.files["file"], "activities")
 
-        # Save file name to database
-        secure_filename_var = secure_filename(request.files["file"].filename)
-        form.minute.data = request.files["file"].filename
-        unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
-        # Save Image
-        request.files["file"].save(os.path.join(app.config["UPLOAD_FOLDER"], "meetings", unique_filename))
-        form.file.data = unique_filename
-        meeting_to_update.minute = request.files["file"].filename
-        meeting_to_update.file = unique_filename
+            annualReport_to_update.file = unique_filename
+            annualReport_to_update.filename = request.files["file"].filename
+
+        annualReport_to_update.visible = form.visible.data
 
         try:
             db.session.commit()
-            flash("Meeting updated successfully!")
-            form.date.data = ''
-            form.minute.data = ''
-            form.attendees.data = ''
-            return render_template("meetings/update_meeting.html",
+            flash("Annual Report updated successfully!")
+            return render_template("content/update_annualReport.html",
                 form=form,
-                meeting_to_update=meeting_to_update)
+                annualReport_to_update=annualReport_to_update)
         except:
             flash("Error")
-            return render_template("meetings/update_meeting.html",
+            return render_template("content/update_annualReport.html",
                 form=form,
-                meeting_to_update=meeting_to_update)
+                annualReport_to_update=annualReport_to_update)
     else:
-        return render_template("meetings/update_meeting.html",
+        return render_template("content/update_annualReport.html",
             form=form,
-            meeting_to_update=meeting_to_update)
+            annualReport_to_update=annualReport_to_update)
+
+@app.route('/delete_annualReport/<int:id>', methods=['GET', 'POST'])
+def delete_annualReport(id):
+    annualReport_to_update = AnnualReports.query.get_or_404(id)
+    form = AnnualReportForm()
+    try:
+        db.session.delete(annualReport_to_update)
+        db.session.commit()
+        flash("Annual Report deleted successfully!")
+
+        form.file.data = ''
+        form.visible.data = ''
+
+        return render_template('content/update_annualReport.html',
+            form = form,
+            annualReport_to_update=annualReport_to_update)
+    except:
+        flash("Error: Not possible to delete Annual Report.")
+        return render_template('content/update_annualReport.html',
+            form = form,
+            annualReport_to_update=annualReport_to_update)

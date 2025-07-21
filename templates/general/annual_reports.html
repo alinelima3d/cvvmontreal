@@ -5,11 +5,14 @@
   <div class="col-md-12 shadow-lg rounded div-info" id="myMembership">
     <div class="row">
     {% for annualReport in annualReports %}
-     <div class="col-md-2">
-       <p class="text-center"><img src="{{ url_for('static', filename='images/icons/pdf.png') }}" style="width:100px" alt=""></p>
-       <p class="text-center"><a target="_blank" href="{{ url_for('static', filename='upload/memberships/' + annualReport.filename ) }}">{{ annualReport.filename }}</a></p>
+      {% if annualReport.visible %}
+       <div class="col-md-2">
 
-     </div>
+         <p class="text-center"><img src="{{ url_for('static', filename='images/icons/pdf.png') }}" style="width:100px" alt=""></p>
+         <p class="text-center"><a target="_blank" href="{{ url_for('static', filename='upload/memberships/' + annualReport.filename ) }}">{{ annualReport.filename }}</a></p>
+
+       </div>
+     {% endif %}
     {% endfor %}
   </div>
  </div>

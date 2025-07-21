@@ -1,5 +1,5 @@
 <div class="col-md-12 shadow-lg rounded div-info" id="paymentList">
-   <h3>Payment Status For All Members</h3>
+   <h3>Payment Statuses</h3>
    <input type="text" class="form-control" id="datatable-search-input" placeholder="Search"/>
    <div class="form-group">
      <table class="table" id="usersTable">
@@ -38,7 +38,7 @@
             {% endif %}
 
          </td>
-         <td><button class="btn" style="padding:0px" data-bs-toggle="modal" data-bs-target="#defaultModal" data-bs-url="{{ url_for('update_membership', id=member_payment.id) }}" data-bs-title="Update Membership {{ member_payment.name }}"><i class="bi bi-gear"></i></button></td>
+         <td><button class="btn" style="padding:0px" data-bs-toggle="modal" data-bs-target="#defaultModal" data-bs-url="{{ url_for('update_memberships', id=member_payment.id) }}" data-bs-title="Update Memberships {{ member_payment.name }}"><i class="bi bi-gear"></i></button></td>
        </tr>
      {% endfor %}
      </table>
