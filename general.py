@@ -31,7 +31,7 @@ def calculate_days_from_today(target_date, date_format="%Y-%m-%d"):
 @app.route('/')
 def index():
     clean = request.args.get('clean')
-    quotes = Quotes.query.filter_by(visible=True)
+    quotes = Quotes.query.filter_by(visible=True).all()
     banner = Banners.query.filter_by(visible=True).first()
     return render_template('/general/index.html',
         clean=clean,
