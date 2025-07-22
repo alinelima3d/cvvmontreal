@@ -40,8 +40,8 @@ UPLOAD_FOLDER = 'static/upload/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.create_all()
 migrate = Migrate(app, db)
 
 
