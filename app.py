@@ -34,7 +34,7 @@ print('app.debug', app.debug)
 # if app.debug:
 #     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/cvv'
 # else:
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ucocfesi3a50sp:pd433ef3bdce54e70213c225eeb3635b196db7de24db82f7bad98f30d35820253@c34u0gd6rbe7bo.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d6eq465ijvjihi'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ucocfesi3a50sp:pd433ef3bdce54e70213c225eeb3635b196db7de24db82f7bad98f30d35820253@c34u0gd6rbe7bo.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d6eq465ijvjihi'
 
 UPLOAD_FOLDER = 'static/upload/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
