@@ -90,7 +90,9 @@ def add_executive_member():
     form = ExecutiveMemberForm()
     print('add 1')
     if form.validate_on_submit():
+        print('add 1a')
         user = ExecutiveMembers.query.filter_by(email=form.email.data).first()
+        print('add 1b')
         pic_name = ''
         # Save file name to database
         print('add 2')
@@ -128,7 +130,8 @@ def add_executive_member():
         form.email.data = ''
         form.password_hash.data = ''
         form.password_hash2.data = ''
-
+    else:
+        print("add form not validated")
     our_executive_members = ExecutiveMembers.query.order_by(ExecutiveMembers.name)
     return render_template('executive_members/add_executive_member.html',
         form = form,
