@@ -194,7 +194,7 @@ def create_initial_user():
             title="Initial Title",
             text="Initial Text",
             )
-        db.session.add(executiveMember)
+        db.session.add(task_repartitionText)
         db.session.commit()
         result.append("Initial Task Repartition added successfully.")
 
