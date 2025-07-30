@@ -4,6 +4,9 @@ from app import app, db, Members, Meetings, Memberships, ExecutiveMembers, News,
 from flask import jsonify
 import json
 
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
 ## API------------------------------------------------------
 
 @app.route('/check_login/', methods = ['GET','POST'])
@@ -165,3 +168,27 @@ def clear_attendance():
             db.session.commit()
     returnVar = {}
     return returnVar, 200
+
+@app.route('/create_initial_user/')
+def create_initial_user():
+    print("create_initial_user 1")
+    hashed_pw = generate_password_hash("123", method='pbkdf2:sha256')
+    print("create_initial_user 2")
+    executiveMember = ExecutiveMembers(
+        name="Aline Lima",
+        email="aline3d@gmail.com",
+        # english=form.english.data,
+        # french=form.french.data,
+        role="Developer",
+        # order=form.order.data,
+        # telephone=form.telephone.data,
+        organization="Organization",
+        # executive_member_pic=pic_name,
+        password_hash=hashed_pw,
+        )
+    print("create_initial_user 3")
+    db.session.add(executiveMember)
+    print("create_initial_user 4")
+    db.session.commit()
+    print("create_initial_user 5")
+    return {}, 200
