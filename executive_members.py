@@ -88,19 +88,22 @@ def executive_member_area(id):
 def add_executive_member():
     name = None
     form = ExecutiveMemberForm()
+    print('add 1')
     if form.validate_on_submit():
         user = ExecutiveMembers.query.filter_by(email=form.email.data).first()
         pic_name = ''
         # Save file name to database
-
+        print('add 2')
         if user is None:
             if request.files["executive_member_pic"].filename:
+                print('add 3')
                 pic_filename = secure_filename(request.files["executive_member_pic"].filename)
                 pic_name = str(uuid.uuid1()) + "_" + pic_filename
                 # Save Image
                 request.files["executive_member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "executive_member_pics", pic_name))
-
+            print('add 4')
             hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
+            print('add 5')
             executiveMember = ExecutiveMembers(
                 name=form.name.data,
                 email=form.email.data,
@@ -113,8 +116,11 @@ def add_executive_member():
                 executive_member_pic=pic_name,
                 password_hash=hashed_pw,
                 )
+            print('add 6')
             db.session.add(executiveMember)
+            print('add 7')
             db.session.commit()
+            print('add 8')
             flash('Executive Member <strong>%s</strong> added successfully!' % form.name.data)
 
         name = form.name.data
