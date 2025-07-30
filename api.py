@@ -189,16 +189,13 @@ def create_initial_user():
         result.append("Initial Executive Member added successfully.")
     task_repartitionText = TaskRepartitionTexts.query.filter_by(id=1).first()
     if not task_repartitionText:
-        executiveMember = TaskRepartitionTexts(
-            name="Initial User",
-            email="user@mail.com",
-            role="Initial User",
-            order=1,
-            organization="System",
-            password_hash=hashed_pw,
+        task_repartitionText = TaskRepartitionTexts(
+            id=1,
+            title="Initial Title",
+            text="Initial Text",
             )
         db.session.add(executiveMember)
         db.session.commit()
         result.append("Initial Task Repartition added successfully.")
 
-    return {}, 200
+    return result, 200
