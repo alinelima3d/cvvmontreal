@@ -4,8 +4,9 @@ from webforms import NewsForm
 
 from werkzeug.utils import secure_filename
 import uuid as uuid
-import os
 from datetime import date
+import os
+
 
 @app.route('/add_news', methods=['GET', 'POST'])
 def add_news():
@@ -19,7 +20,11 @@ def add_news():
             unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
 
             # Save File
-            request.files["file"].save(os.path.join(app.config["UPLOAD_FOLDER"], "news", unique_filename))
+            # request.files["file"].save(os.path.join(app.config["UPLOAD_FOLDER"], "news", unique_filename))
+            # s3_client.upload_fileobj(form.file.data, "cvvmontreal", ("docs/news/" + unique_filename))
+            unique_filename = save_file(form.file.data, "docs/news/")
+
+
             form.file.data = unique_filename
 
             # Save in database

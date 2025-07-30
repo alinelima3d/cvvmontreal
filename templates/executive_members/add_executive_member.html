@@ -26,8 +26,17 @@
       <strong>{{ form.telephone.label(class="form-label") }}</strong>
       {{ form.telephone(class="form-control") }}
 
+      <strong>{{ form.organization.label(class="form-label") }}</strong>
+      {{ form.organization(class="form-control") }}
+
       <strong>{{ form.order.label(class="form-label") }}</strong>
       {{ form.order(class="form-control") }}
+
+      <strong>{{ form.english.label(class="form-label") }}</strong>
+      {{ form.english() }}
+
+      <strong>{{ form.french.label(class="form-label") }}</strong>
+      {{ form.french() }}<br/>
 
       <strong>{{ form.password_hash.label(class="form-label") }}</strong>
       {{ form.password_hash(class="form-control") }}
@@ -36,21 +45,11 @@
       {{ form.password_hash2(class="form-control") }}
 
 
-
-      <!-- <strong>{{ form.english.label(class="form-label") }}</strong>
-      {{ form.english() }}
-
-      <strong>{{ form.french.label(class="form-label") }}</strong>
-      {{ form.french() }}<br/> -->
-
-      <!-- <strong>{{ form.preferable.label(class="form-label") }}</strong>
-      {{ form.preferable(class="form-control") }} -->
-
-      <strong>{{ form.organization.label(class="form-label") }}</strong>
-      {{ form.organization(class="form-control") }}
-
       <strong>{{ form.executive_member_pic.label(class="form-label") }}</strong>
       {{ form.executive_member_pic(class="form-control") }}
+
+
+
       <br/>
       {{ form.submit(class="btn blueButton") }}
 

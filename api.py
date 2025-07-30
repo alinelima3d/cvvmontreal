@@ -17,6 +17,7 @@ def check_login():
     if not user:
         user = ExecutiveMembers.query.filter_by(email=result["email"]).first()
         is_executive_member = True
+
     userDict = {}
     if user:
         if user.verify_password(result["pass"]):
@@ -28,6 +29,8 @@ def check_login():
                 userDict['member_pic'] = user.executive_member_pic
             else:
                 userDict['member_pic'] = user.member_pic
+            app.config['CURRENT_USER_ID'] = user.id
+            app.config['IS_EXECUTIVE_MEMBER'] = is_executive_member
         else:
             userDict['error'] = "Invalid password"
     else:

@@ -14,7 +14,7 @@
 
     <tr>
       {% if activity.file %}
-       <td class="firstCol" style="width:150px"><img class="photo_list_square" src="{{ url_for('static', filename='upload/activities/' + activity.file|string ) }}"></td>
+       <td class="firstCol" style="width:150px"><img class="photo_list_square" src="https://cvvmontreal.s3.us-east-2.amazonaws.com/docs/activity/{{  activity.file|string }}"></td>
       {% else %}
        <td></td>
       {% endif %}

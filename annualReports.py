@@ -14,12 +14,12 @@ def add_annualReport():
         annualReport = AnnualReports.query.filter_by(filename=form.filename.data).first()
         if annualReport is None:
             # Save file name to database
-            secure_filename_var = secure_filename(request.files["file"].filename)
+            # secure_filename_var = secure_filename(request.files["file"].filename)
             form.filename.data = request.files["file"].filename
-            unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
+            # unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
 
             # Save File
-            request.files["file"].save(os.path.join(app.config["UPLOAD_FOLDER"], "annualReports", unique_filename))
+            unique_filename = save_file(form.file.data, "images/activities/")
             form.file.data = unique_filename
 
             # Save in database

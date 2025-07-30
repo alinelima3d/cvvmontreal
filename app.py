@@ -26,21 +26,46 @@ from wtforms.validators import DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+import os
+import boto3
+import json
+
+
+os.environ['AWS_DEFAULT_REGION'] = 'us-east-2'
+bucket_policy = {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": f"arn:aws:s3:::cvvmontreal/*"
+        }
+    ]
+}
+
+s3_client = boto3.client('s3')
+s3_client.put_bucket_policy(Bucket="cvvmontreal", Policy=json.dumps(bucket_policy))
+
+
 app = Flask(__name__)
 ckeditor = CKEditor(app)
+app.config['S3'] = s3_client
 
-app.config['SECRET_KEY'] = 'my super secret key that no one is suppose to know'
-print('app.debug', app.debug)
 if app.debug:
     UPLOAD_FOLDER = 'static/upload/'
+    app.config['S3_BASE_FOLDER'] = 'dev/'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/cvv'
 else:
     UPLOAD_FOLDER = '/app/static/upload/'
+    app.config['S3_BASE_FOLDER'] = ''
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ucocfesi3a50sp:pd433ef3bdce54e70213c225eeb3635b196db7de24db82f7bad98f30d35820253@c34u0gd6rbe7bo.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d6eq465ijvjihi'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CURRENT_USER_ID'] = None
 app.config['IS_EXECUTIVE_MEMBER'] = None
+app.config['SECRET_KEY'] = "secretKey"
 
 db = SQLAlchemy(app)
 with app.app_context():
@@ -284,12 +309,15 @@ def save_file(file, folderName):
     unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
 
     # Save File
-    folder = os.path.join(app.config["UPLOAD_FOLDER"], "taskRepartitions")
-    try:
-        os.makedirs(folder)
-    except:
-        print('Not possible to create folder' + folder)
-    file.save(os.path.join(app.config["UPLOAD_FOLDER"], folderName, unique_filename))
+    # folder = os.path.join(app.config["UPLOAD_FOLDER"], "taskRepartitions")
+    # try:
+    #     os.makedirs(folder)
+    # except:
+    #     print('Not possible to create folder' + folder
+    filename_s3 = app.config['S3_BASE_FOLDER'] + folderName + unique_filename
+    s3_client.upload_fileobj(file, "cvvmontreal", filename_s3)
+    print('filename_s3', filename_s3)
+    # file.save(os.path.join(app.config["UPLOAD_FOLDER"], folderName, unique_filename))
     return unique_filename
 
 # import declared routes

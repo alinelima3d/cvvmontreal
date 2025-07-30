@@ -26,20 +26,20 @@ class MemberForm(FlaskForm):
 
 class ExecutiveMemberForm(FlaskForm):
     name = StringField("Name*:", validators=[DataRequired()])
-    email = StringField("Email*:", validators=[DataRequired()])
     role = StringField("Role*:", validators=[DataRequired()])
+    email = StringField("Email*:", validators=[DataRequired()])
     bio = StringField("Bio:")
     telephone = StringField("Telephone:")
     english = BooleanField("English:")
     french = BooleanField("French:")
-    preferable = SelectField('Preferable:', choices=[
-            ('English', 'English'),
-            ('French', 'French'),
-        ])
+    # preferable = SelectField('Preferable:', choices=[
+    #         ('English', 'English'),
+    #         ('French', 'French'),
+    #     ])
     organization = StringField("Organization:")
     order = IntegerField("Order:")
     executive_member_pic = FileField("Executive Member Pic:")
-    update_pw = BooleanField("Update Password")
+    # update_pw = BooleanField("Update Password")
     password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
     password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField("Update")

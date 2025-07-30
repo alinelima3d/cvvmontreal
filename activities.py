@@ -7,6 +7,7 @@ import uuid as uuid
 import os
 
 
+
 @app.route('/add_activity', methods=['GET', 'POST'])
 def add_activity():
     form = ActivityForm()
@@ -14,12 +15,15 @@ def add_activity():
         activity = Activities.query.filter_by(title=form.title.data).first()
         if activity is None:
             # Save file name to database
-            secure_filename_var = secure_filename(request.files["file"].filename)
+            # secure_filename_var = secure_filename(request.files["file"].filename)
             form.filename.data = request.files["file"].filename
-            unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
+            # unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
 
             # Save File
-            request.files["file"].save(os.path.join(app.config["UPLOAD_FOLDER"], "activities", unique_filename))
+            # request.files["file"].save(os.path.join(app.config["UPLOAD_FOLDER"], "activities", unique_filename))
+            # s3_client.upload_fileobj(form.file.data, "cvvmontreal", ("docs/activity/" + unique_filename))
+            unique_filename = save_file(form.file.data, "images/activity/")
+
             form.file.data = unique_filename
 
             # Save in database
@@ -62,7 +66,7 @@ def update_activity(id):
             except:
                 print('Not possible to delete file ' + file)
 
-            unique_filename = save_file(request.files["file"], "activities")
+            unique_filename = save_file(request.files["file"], "docs/activities/" + request.files["file"])
 
             activity_to_update.file = unique_filename
             activity_to_update.filename = request.files["file"].filename

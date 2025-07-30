@@ -21,12 +21,16 @@ def add_banner():
                     db.session.commit()
 
             # Save file name to database
-            secure_filename_var = secure_filename(request.files["file"].filename)
+            # secure_filename_var = secure_filename(request.files["file"].filename)
             form.filename.data = request.files["file"].filename
-            unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
+            # unique_filename = str(uuid.uuid1()) + "_" + secure_filename_var
 
             # Save File
-            request.files["file"].save(os.path.join(app.config["UPLOAD_FOLDER"], "banners", unique_filename))
+            # request.files["file"].save(os.path.join(app.config["UPLOAD_FOLDER"], "banners", unique_filename))
+            # s3_client.upload_fileobj(form.file.data, "cvvmontreal", ("docs/activity/" + unique_filename))
+            unique_filename = save_file(form.file.data, "images/banners/")
+
+
             form.file.data = unique_filename
 
 

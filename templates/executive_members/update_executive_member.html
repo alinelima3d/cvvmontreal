@@ -38,20 +38,7 @@
     {{ form.english(checked=executive_member_to_update.english) }}<br/>
     <strong>{{ form.french.label(class="form-label") }}</strong>
     {{ form.french(checked=executive_member_to_update.french) }}<br/>
-    <strong>{{ form.preferable.label(class="form-label") }}</strong>
-    
-    <select name="preferable" id="preferable" class="form-control">
-      {% if executive_member_to_update.preferable == "English" %}
-        <option value="English" selected>English</option>
-      {% else %}
-        <option value="English">English</option>
-      {% endif %}
-      {% if executive_member_to_update.preferable == "French" %}
-        <option value="French" selected>French</option>
-      {% else %}
-        <option value="French">French</option>
-      {% endif %}
-    </select>
+
 
     <strong>{{ form.organization.label(class="form-label") }}</strong>
     {{ form.organization(class="form-control", value=executive_member_to_update.organization) }}

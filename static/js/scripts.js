@@ -32,11 +32,11 @@ function loginFn() {
       sessionStorage.setItem('userId', out.id);
       if (out.is_executive_member) {
         sessionStorage.setItem('isExecutiveMember', 'true');
-        window.location.href = "/executive_member_area/" + out.id;
+        window.location.href = "/executive_member_area/";
       }
       else {
         sessionStorage.setItem('isExecutiveMember', 'false');
-        window.location.href = "/member_area/" + out.id;
+        window.location.href = "/member_area/";
       }
 
     }
@@ -163,16 +163,13 @@ function showUserPhoto() {
   if (isExecutiveMember == 'true') {
     console.log('is em')
     var url_member = '/get_executive_member_id/' + id;
-    var photo_url = "/static/upload/executive_member_pics/"
+    var photo_url = "https://cvvmontreal.s3.us-east-2.amazonaws.com/images/executive_member_pics/"
   }
   else {
     console.log('is not em')
     var url_member = '/get_member_id/' + id;
     var photo_url = "/static/upload/member_pics/"
   }
-
-  console.log(document.getElementById("executive_member_area_menu"));
-  console.log(document.getElementById("executive_member_area_menu").href);
 
   document.getElementById("executive_member_area_menu").href = "/executive_member_area/" + id;
   console.log(document.getElementById("executive_member_area_menu").href);

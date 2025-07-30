@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, flash, request
 
-from app import app, db, Members, ExecutiveMembers, Meetings, Memberships, Surveys, get_payment_status, AnnualReports, Activities, News, Banners, Quotes, TaskRepartitionTexts, TaskRepartitionFiles
+from app import app, db, Members, ExecutiveMembers, Meetings, Memberships, Surveys, get_payment_status, AnnualReports, Activities, News, Banners, Quotes, TaskRepartitionTexts, TaskRepartitionFiles, save_file
 from webforms import ExecutiveMemberForm
 
 from werkzeug.utils import secure_filename
@@ -8,12 +8,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid as uuid
 import os
 
+
 # area, add, update, delete
 
-@app.route('/executive_member_area/<int:id>')
-def executive_member_area(id):
+@app.route('/executive_member_area/')
+def executive_member_area():
     form = ExecutiveMemberForm()
-    executive_member = ExecutiveMembers.query.filter_by(id=id).first()
+    executive_member = ExecutiveMembers.query.filter_by(id=app.config['CURRENT_USER_ID']).first()
     task_repartitionText = TaskRepartitionTexts.query.filter_by(id=1).first()
     task_repartition_files = TaskRepartitionFiles.query.order_by(TaskRepartitionFiles.filename)
     our_executive_members = ExecutiveMembers.query.order_by(ExecutiveMembers.name)
@@ -93,7 +94,7 @@ def add_executive_member():
         print('add 1a')
         user = ExecutiveMembers.query.filter_by(email=form.email.data).first()
         print('add 1b')
-        pic_name = ''
+        unique_filename = ''
         # Save file name to database
         print('add 2')
         if user is None:
@@ -101,8 +102,10 @@ def add_executive_member():
                 print('add 3')
                 pic_filename = secure_filename(request.files["executive_member_pic"].filename)
                 pic_name = str(uuid.uuid1()) + "_" + pic_filename
-                # Save Image
-                request.files["executive_member_pic"].save(os.path.join(app.config["UPLOAD_FOLDER"], "executive_member_pics", pic_name))
+                # Upload Image
+                unique_filename = save_file(form.executive_member_pic.data, "images/executive_member_pics/")
+
+                # s3_client.upload_fileobj(form.executive_member_pic.data, "cvvmontreal", ("images/executive_member_pics/" + pic_name))
             print('add 4')
             hashed_pw = generate_password_hash(form.password_hash.data, method='pbkdf2:sha256')
             print('add 5')
@@ -115,7 +118,7 @@ def add_executive_member():
                 order=form.order.data,
                 telephone=form.telephone.data,
                 organization=form.organization.data,
-                executive_member_pic=pic_name,
+                executive_member_pic=unique_filename,
                 password_hash=hashed_pw,
                 )
             print('add 6')
@@ -124,12 +127,12 @@ def add_executive_member():
             db.session.commit()
             print('add 8')
             flash('Executive Member <strong>%s</strong> added successfully!' % form.name.data)
-
-        name = form.name.data
-        form.name.data = ''
-        form.email.data = ''
-        form.password_hash.data = ''
-        form.password_hash2.data = ''
+        #
+        # name = form.name.data
+        # form.name.data = ''
+        # form.email.data = ''
+        # form.password_hash.data = ''
+        # form.password_hash2.data = ''
     else:
         print("add form not validated")
     our_executive_members = ExecutiveMembers.query.order_by(ExecutiveMembers.name)
@@ -151,14 +154,14 @@ def update_executive_member(id):
         executive_member_to_update.order = request.form["order"]
         executive_member_to_update.english = form.english.data
         executive_member_to_update.french = form.french.data
-        executive_member_to_update.preferable = form.preferable.data
+        # executive_member_to_update.preferable = form.preferable.data
         executive_member_to_update.organization = request.form["organization"]
 
 
         # Save file name to database
         if request.files["executive_member_pic"]:
             pic_filename = secure_filename(request.files["executive_member_pic"].filename)
-            pic_name = str(uuid.uuid1()) + "_" + pic_filename
+            # pic_name = str(uuid.uuid1()) + "_" + pic_filename
             # Save Image
             print(request.files["executive_member_pic"])
             folder = os.path.join(app.config["UPLOAD_FOLDER"], "executive_member_pics")
@@ -167,9 +170,11 @@ def update_executive_member(id):
                 os.makedirs(folder)
             except:
                 print('Not possible to create folder' + folder)
-            request.files["executive_member_pic"].save(os.path.join(folder, pic_name))
-            print("saved to", os.path.join(folder, pic_name))
-            executive_member_to_update.executive_member_pic = pic_name
+            unique_filename = save_file(form.executive_member_pic.data, "images/executive_member_pics/")
+            # s3_client.upload_fileobj(form.executive_member_pic.data, "cvvmontreal", ("images/executive_member_pics/" + pic_name))
+            # request.files["executive_member_pic"].save(os.path.join(folder, pic_name))
+            # print("saved to", ("executive_member_pics/" + pic_name))
+            executive_member_to_update.executive_member_pic = unique_filename
 
         try:
             db.session.commit()
