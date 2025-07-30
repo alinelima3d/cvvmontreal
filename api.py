@@ -176,8 +176,11 @@ def clear_attendance():
 def create_initial_user():
     hashed_pw = generate_password_hash("123", method='pbkdf2:sha256')
     result = []
+    print(1)
     executive_member = ExecutiveMembers.query.filter_by(name="Initial Executive Member").first()
+    print(2)
     if not executive_member:
+        print('2a')
         executiveMember = ExecutiveMembers(
             id=1,
             name="Initial Executive Member",
@@ -187,12 +190,19 @@ def create_initial_user():
             organization="System",
             password_hash=hashed_pw,
             )
+        print('2b')
         db.session.add(executiveMember)
+        print('2c')
         db.session.commit()
+        print('2c')
         result.append("Initial Executive Member added successfully.")
-    member = Members.query.filter_by(id=1).first()
+    print('3')
+    member = Members.query.filter_by(name="Initial Member").first()
+    print('4')
     hashed_pw = generate_password_hash("123", method='pbkdf2:sha256')
+    print('5')
     if not member:
+        print('5a')
         member = Members(
             id=1,
             name="Initial Member",
@@ -201,18 +211,29 @@ def create_initial_user():
             organization="System",
             password_hash=hashed_pw,
             )
+        print('5b')
         db.session.add(executiveMember)
+        print('5c')
         db.session.commit()
-        result.append("Initial Executive Member added successfully.")
+        print('5d')
+        result.append("Initial Member added successfully.")
+        print('5e')
+    print('6')
     task_repartitionText = TaskRepartitionTexts.query.filter_by(id=1).first()
+    print('7')
     if not task_repartitionText:
+        print('7a')
         task_repartitionText = TaskRepartitionTexts(
             id=1,
             title="Initial Title",
             text="Initial Text",
             )
+        print('7b')
         db.session.add(task_repartitionText)
+        print('7c')
         db.session.commit()
+        print('7d')
         result.append("Initial Task Repartition added successfully.")
-
+        print('7e')
+    print('8')
     return result, 200
