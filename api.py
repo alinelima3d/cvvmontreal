@@ -191,13 +191,13 @@ def create_initial_user():
         db.session.commit()
         result.append("Initial Executive Member added successfully.")
     member = Members.query.filter_by(id=1).first()
-    if not executive_member:
-        executiveMember = ExecutiveMembers(
+    hashed_pw = generate_password_hash("123", method='pbkdf2:sha256')
+    if not member:
+        member = Members(
             id=1,
             name="Initial Member",
             email="member@mail.com",
             role="Initial Member",
-            order=1,
             organization="System",
             password_hash=hashed_pw,
             )
