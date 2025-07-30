@@ -176,13 +176,27 @@ def clear_attendance():
 def create_initial_user():
     hashed_pw = generate_password_hash("123", method='pbkdf2:sha256')
     result = []
-    executive_member = ExecutiveMembers.query.filter_by(id=1).first()
+    executive_member = ExecutiveMembers.query.filter_by(name="Initial Executive Member").first()
     if not executive_member:
         executiveMember = ExecutiveMembers(
             id=1,
-            name="Initial User",
-            email="user@mail.com",
-            role="Initial User",
+            name="Initial Executive Member",
+            email="exec@mail.com",
+            role="Initial Executive Member",
+            order=1,
+            organization="System",
+            password_hash=hashed_pw,
+            )
+        db.session.add(executiveMember)
+        db.session.commit()
+        result.append("Initial Executive Member added successfully.")
+    member = Members.query.filter_by(id=1).first()
+    if not executive_member:
+        executiveMember = ExecutiveMembers(
+            id=1,
+            name="Initial Member",
+            email="member@mail.com",
+            role="Initial Member",
             order=1,
             organization="System",
             password_hash=hashed_pw,
