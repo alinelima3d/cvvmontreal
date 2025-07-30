@@ -155,6 +155,9 @@ function showUserPhoto() {
   // UNHIDE BOTAO USER
   document.getElementById("photo").style.display = "block";
 
+
+
+
   let id = sessionStorage.getItem('userId');
   let isExecutiveMember = sessionStorage.getItem('isExecutiveMember');
   if (isExecutiveMember == 'true') {
@@ -167,6 +170,13 @@ function showUserPhoto() {
     var url_member = '/get_member_id/' + id;
     var photo_url = "/static/upload/member_pics/"
   }
+
+  console.log(document.getElementById("executive_member_area_menu"));
+  console.log(document.getElementById("executive_member_area_menu").href);
+
+  document.getElementById("executive_member_area_menu").href = "/executive_member_area/" + id;
+  console.log(document.getElementById("executive_member_area_menu").href);
+
   console.log(url_member)
   fetch(url_member)
   .then(res => res.json())

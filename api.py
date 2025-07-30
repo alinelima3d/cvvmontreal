@@ -1,6 +1,6 @@
 from flask import request
 
-from app import app, db, Members, Meetings, Memberships, ExecutiveMembers, News, attendance
+from app import app, db, Members, Meetings, Memberships, ExecutiveMembers, News, attendance, TaskRepartitionTexts
 from flask import jsonify
 import json
 
@@ -172,18 +172,33 @@ def clear_attendance():
 @app.route('/create_initial_user/')
 def create_initial_user():
     hashed_pw = generate_password_hash("123", method='pbkdf2:sha256')
-    executiveMember = ExecutiveMembers(
-        name="Initial User",
-        email="user@mail.com",
-        # english=form.english.data,
-        # french=form.french.data,
-        role="Initial User",
-        order=1,
-        # telephone=form.telephone.data,
-        organization="System",
-        # executive_member_pic=pic_name,
-        password_hash=hashed_pw,
-        )
-    db.session.add(executiveMember)
-    db.session.commit()
+    result = []
+    executive_member = ExecutiveMembers.query.filter_by(id=1).first()
+    if not executive_member:
+        executiveMember = ExecutiveMembers(
+            id=1,
+            name="Initial User",
+            email="user@mail.com",
+            role="Initial User",
+            order=1,
+            organization="System",
+            password_hash=hashed_pw,
+            )
+        db.session.add(executiveMember)
+        db.session.commit()
+        result.append("Initial Executive Member added successfully.")
+    task_repartitionText = TaskRepartitionTexts.query.filter_by(id=1).first()
+    if not task_repartitionText:
+        executiveMember = TaskRepartitionTexts(
+            name="Initial User",
+            email="user@mail.com",
+            role="Initial User",
+            order=1,
+            organization="System",
+            password_hash=hashed_pw,
+            )
+        db.session.add(executiveMember)
+        db.session.commit()
+        result.append("Initial Task Repartition added successfully.")
+
     return {}, 200
