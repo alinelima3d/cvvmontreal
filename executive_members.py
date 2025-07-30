@@ -157,7 +157,7 @@ def update_executive_member(id):
                 os.makedirs(folder)
             except:
                 print('Not possible to create folder' + folder)
-            request.files["executive_member_pic"].save(folder, pic_name))
+            request.files["executive_member_pic"].save(os.path.join(folder, pic_name))
             executive_member_to_update.executive_member_pic = pic_name
 
         try:

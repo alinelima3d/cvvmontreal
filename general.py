@@ -154,3 +154,7 @@ def become_member():
     clean = request.args.get('clean')
     return render_template('members/become_member.html',
         clean=clean)
+
+@app.route('/tutorials')
+def tutorials():
+    return render_template('general/tutorials.html')
