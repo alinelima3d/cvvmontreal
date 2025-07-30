@@ -12,14 +12,15 @@ import os
 
 @app.route('/executive_member_area/<int:id>')
 def executive_member_area(id):
-    our_executive_members = ExecutiveMembers.query.order_by(ExecutiveMembers.name)
-    our_members = Members.query.order_by(Members.name)
     form = ExecutiveMemberForm()
     executive_member = ExecutiveMembers.query.filter_by(id=id).first()
+    task_repartitionText = TaskRepartitionTexts.query.filter_by(id=1).first()
+    task_repartition_files = TaskRepartitionFiles.query.order_by(TaskRepartitionFiles.filename)
+    our_executive_members = ExecutiveMembers.query.order_by(ExecutiveMembers.name)
+    our_members = Members.query.order_by(Members.name)
     surveys = Surveys.query.order_by(Surveys.title)
     meetings = Meetings.query.order_by(Meetings.date)
-    task_repartitionText = TaskRepartitionTexts.query.get_or_404(1)
-    task_repartition_files = TaskRepartitionFiles.query.order_by(TaskRepartitionFiles.filename)
+
     member_payments = []
     for member in our_members:
         memberships = Memberships.query.filter_by(id=member.id).order_by(Memberships.start)
@@ -69,6 +70,9 @@ def executive_member_area(id):
         {"name": "Members", "link": "#member_list"},
     ]
     return render_template('executive_members/executive_member_area.html',
+        executive_member=executive_member,
+        task_repartitionText=task_repartitionText,
+        task_repartition_files=task_repartition_files,
         our_members=our_members,
         our_executive_members=our_executive_members,
         is_executive_member=True,
@@ -76,11 +80,8 @@ def executive_member_area(id):
         surveys=surveys,
         meetings=meetings,
         title="Members",
-        executive_member=executive_member,
         member_payments=member_payments,
         deletable=True,
-        task_repartitionText=task_repartitionText,
-        task_repartition_files=task_repartition_files,
         form=form)
 
 @app.route('/add_executive_member', methods=['GET', 'POST'])
