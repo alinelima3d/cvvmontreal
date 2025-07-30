@@ -212,7 +212,7 @@ def create_initial_user():
             password_hash=hashed_pw,
             )
         print('5b')
-        db.session.add(executiveMember)
+        db.session.add(member)
         print('5c')
         db.session.commit()
         print('5d')
