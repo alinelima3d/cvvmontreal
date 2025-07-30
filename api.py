@@ -178,7 +178,7 @@ def create_initial_user():
         # english=form.english.data,
         # french=form.french.data,
         role="Initial User",
-        # order=form.order.data,
+        order=1,
         # telephone=form.telephone.data,
         organization="System",
         # executive_member_pic=pic_name,
